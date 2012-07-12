@@ -19,7 +19,7 @@ class window.App
   start: (uid = '') ->
     console.info 'app start'
 
-    VK.api 'audio.get', uid: uid, (data) ->
+    VK.api 'audio.get', uid: uid, (data) =>
       return alert err data if data.error
 
       app.my_audio = data.response
@@ -29,8 +29,20 @@ class window.App
         unless track.lyrics_id?
           app.without_lyrics.push track
 
-      console.info "#{app.without_lyrics.length} треков без текста 
-      (#{app.my_audio.length} всего)"
+      console.info "#{@without_lyrics.length} треков без текста 
+      (#{@my_audio.length} всего)"
+
+      tracks_block = $('#tracks')
+      tracks_block.lionbars()
+
+      for track in @without_lyrics
+        track_block = $("<div class='track' id='track_#{track.aid}'>
+          <div class='name'>#{ track.artist } – #{ track.title }</div>
+          <div class='duration'>#{ makeDuration track.duration }</div>
+        </div>")
+        tracks_block.append track_block
+
+      
 
   improve: ->
     @count ||= @without_lyrics.length
@@ -62,7 +74,7 @@ class window.App
 
             if data.response
               @ready += 1
-              @updateProgress()
+              @updateProgress 'ok'
               if @ready is @count
                 alert "Обновлены #{ @count } трека."
               else
@@ -70,7 +82,7 @@ class window.App
       else
         console.info "По треку #{ @cur_track.aid } ничего не найдено.."
         @ready += 1
-        @updateProgress()
+        @updateProgress 'fail'
         @improve()
 
   searchTracks: (track, count..., callback) ->
@@ -81,7 +93,7 @@ class window.App
       sort: 1
       lyrics: 1
       count: if count.length then count[0] else 10
-    setTimeout (VK.api 'audio.search', params, callback), @sleep
+    setTimeout (-> VK.api 'audio.search', params, callback), @sleep
 
   getLyrics: (ids, callback) ->
     return false unless ids or not callback
@@ -97,7 +109,7 @@ class window.App
 
     code += "return { #{ code_addition.join ',' } };"
 
-    setTimeout (VK.api 'execute', code: code, callback), @sleep
+    setTimeout (-> VK.api 'execute', code: code, callback), @sleep
 
   selectCorrectLyrics: (lyrics) ->
     for max of lyrics then break # getting the first property of hash
@@ -114,11 +126,25 @@ class window.App
       title: track.title
       text: text
 
-    setTimeout (VK.api 'audio.edit', params, callback), @sleep
+    setTimeout (-> VK.api 'audio.edit', params, callback), @sleep
 
-  updateProgress: ->
+  updateProgress: (state) ->
     perc = "#{ (@.ready * 100 / @.count).toFixed() }%"
     app.progress.width perc
+
+    track_block = $("#track_#{@cur_track.aid}")
+    # x = $("#track_#{@cur_track.aid}").offset().top
+    x = $('#tracks').offset().top - 40 + @ready * 20
+
+    if state is 'ok'
+      track_block.css 'background', '-webkit-gradient(linear, left top, left bottom, from(#F8F8F8), to(#DBFCD8))'
+      $('#tracks').animate scrollTop: x, 'fast'
+    else
+      track_block.css 'background', '-webkit-gradient(linear, left top, left bottom, from(#F8F8F8), to(#FFC6D2))'
+      $('#tracks').animate scrollTop: x, 'fast'
+      
+        
+
 
 $ ->
   VK.init ->
@@ -135,3 +161,14 @@ window.e = () ->
 
 window.err = (data) ->
   "#{data.error.error_code} #{data.error.error_msg}"
+
+window.makeDuration = (dur) ->
+  min = (dur/60).toFixed(0)
+  sec = "#{dur%60}"
+  if sec.length is 1
+    sec = '0' + sec
+  "#{min}:#{sec}"
+
+window.goToByScroll = (id) ->
+  id = id.replace 'link', ''
+  

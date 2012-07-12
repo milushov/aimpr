@@ -1,7 +1,9 @@
 #app
   %h2 Приложение находит текст выших музыкальных треков и обновляет их
 
-  #controlls
-    .progress.progress-striped.fl_l{ style: 'width: 400px;' }
-      .bar#progress_improving{ style: 'width: 0%' }
+  #controlls.clear
+    .progress.progress-striped.fl_l{ style: 'width: 290px; height: 37px; margin-right: 10px;' }
+      .bar#progress_improving{ style: 'width: 0%; height: 37px;' }
     %a.btn.btn-primary.btn-large.fl_l#start{ onclick: 'app.improve();' } Начать
+
+  #tracks.clear
