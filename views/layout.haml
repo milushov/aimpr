@@ -10,10 +10,12 @@
     %script{ src: '/js/sugar-1.2.5.min.js',  type: 'text/javascript' }
     %script{ src: '/js/jquery-lionbars.js',  type: 'text/javascript' }
     %script{ src: '/js/jquery.scrollTo-min.js',  type: 'text/javascript' }
+    %script{ src: 'http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js',  type: 'text/javascript' }
     %script{ src: '/js/app.js',  type: 'text/javascript' }
 
     %link{ href: 'http://twitter.github.com/bootstrap/assets/css/bootstrap.css', rel: 'stylesheet', type: 'text/css' }
     %link{ href: '/css/common.css', rel: 'stylesheet', type: 'text/css' }
+    %link{ href: '/css/jquery-lionbars.css', rel: 'stylesheet', type: 'text/css' }
     -# %link{ rel: "shortcut icon", href: "/assets/icon.jpg", type: "image/x-icon" }
   
   %body
@@ -21,11 +23,11 @@
     
     - debug = settings.debug
     - a = request.cookies['user_id'] ? request.cookies['user_id'] : 'guest'
-    - qbaka_key = debug ? '0759461fa31b308cf7f4fcaf19cc0b3d' : '81a4e68328770398c68572af93fd3aed'
+    - qbaka_key = '77b9aa9e892e1a104b9d31a91421e199'
 
     - unless debug
       :plain
-        <script type="text/javascript">var yaParams = {uid: "#{a}"};</script><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter13060828 = new Ya.Metrika({id:13060828, enableAll: true, webvisor:true,params:window.yaParams||{ }}); } catch(e) {} }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/13060828" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+        <script type="text/javascript">var yaParams = {uid: "#{a}"};</script><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter15906313 = new Ya.Metrika({id:15906313, enableAll: true, webvisor:true,params:window.yaParams||{ }}); } catch(e) {} }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/15906313" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     
     :plain
       <script type="text/javascript" id="qbaka">

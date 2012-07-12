@@ -1,5 +1,7 @@
 #app
-  %h2 Приложение находит текст выших музыкальных треков и обновляет их
+  %h3 Находит тексты ваших аудиозаписей и обновляет их.
+  %h4{style: 'margin-bottom: 10px;'}
+    (приложение пока глупое, находит тексты только популярных треков)
 
   #controlls.clear
     .progress.progress-striped.fl_l{ style: 'width: 290px; height: 37px; margin-right: 10px;' }
@@ -7,3 +9,13 @@
     %a.btn.btn-primary.btn-large.fl_l#start{ onclick: 'app.improve();' } Начать
 
   #tracks.clear
+
+#report.modal.hide.fade
+  .modal-header
+    %button.close{ type: 'button', data:{ dismiss: 'modal'} } &times;
+    %h3 Отчет
+  
+  .modal-body
+
+  .modal-footer
+    .btn{ data: {dismiss: 'modal'} } Закрыть

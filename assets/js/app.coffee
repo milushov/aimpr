@@ -3,7 +3,9 @@ class window.App
   my_audio: []
   without_lyrics: []
   progress: null
-  sleep: 1000
+  sleep: 400
+  updated_traks: 0
+  failed_tracks: 0
 
   constructor: (settings = null) ->
     console.info 'app initialize'
@@ -15,6 +17,7 @@ class window.App
     @user = ar.response[0]
 
     @progress = $('#progress_improving')
+    window.qbaka.user = "#{@user.id} #{@user.last_name} #{@user.first_name}"
 
   start: (uid = '') ->
     console.info 'app start'
@@ -33,16 +36,16 @@ class window.App
       (#{@my_audio.length} всего)"
 
       tracks_block = $('#tracks')
-      tracks_block.lionbars()
 
       for track in @without_lyrics
         track_block = $("<div class='track' id='track_#{track.aid}'>
-          <div class='name'>#{ track.artist } – #{ track.title }</div>
-          <div class='duration'>#{ makeDuration track.duration }</div>
+          <div class='name fl_l'>#{ track.artist } – #{ track.title }</div>
+          <div class='duration fl_r'>#{ @_makeDuration track.duration }</div>
         </div>")
         tracks_block.append track_block
 
-      
+      tracks_block.lionbars()
+      VK.callMethod 'resizeWindow', 626, $('body').height() + 10
 
   improve: ->
     @count ||= @without_lyrics.length
@@ -75,15 +78,20 @@ class window.App
             if data.response
               @ready += 1
               @updateProgress 'ok'
+              @updated_traks += 1
               if @ready is @count
-                alert "Обновлены #{ @count } трека."
+                @showReport()
               else
                 @improve()
       else
         console.info "По треку #{ @cur_track.aid } ничего не найдено.."
         @ready += 1
         @updateProgress 'fail'
-        @improve()
+        @failed_tracks += 1
+        if @ready is @count
+          @showReport()
+        else
+          @improve()
 
   searchTracks: (track, count..., callback) ->
     console.info "Поиск трека.. #{ track.aid }"
@@ -92,7 +100,7 @@ class window.App
       auto_complete: 1
       sort: 1
       lyrics: 1
-      count: if count.length then count[0] else 10
+      count: if count.length then count[0] else 15
     setTimeout (-> VK.api 'audio.search', params, callback), @sleep
 
   getLyrics: (ids, callback) ->
@@ -116,6 +124,7 @@ class window.App
     for key, text of lyrics
       if lyrics[max].length < text.length
         max = key
+    max
 
   updateMyTrack: (track, text, callback) ->
     console.info "Обновляем трек.. #{ track.aid }"
@@ -133,18 +142,41 @@ class window.App
     app.progress.width perc
 
     track_block = $("#track_#{@cur_track.aid}")
-    # x = $("#track_#{@cur_track.aid}").offset().top
-    x = $('#tracks').offset().top - 40 + @ready * 20
+
+    x = if @ready > 5 then @ready * 40 else 0
 
     if state is 'ok'
-      track_block.css 'background', '-webkit-gradient(linear, left top, left bottom, from(#F8F8F8), to(#DBFCD8))'
+      track_block.css(
+        'background', '-webkit-gradient(linear, left top, 
+        left bottom, from(#F8F8F8), to(#DBFCD8))'
+      )
       $('#tracks').animate scrollTop: x, 'fast'
+      $('#tracks .lb-wrap').animate scrollTop: x, 'fast'
     else
-      track_block.css 'background', '-webkit-gradient(linear, left top, left bottom, from(#F8F8F8), to(#FFC6D2))'
-      $('#tracks').animate scrollTop: x, 'fast'
+      track_block.css(
+        'background', '-webkit-gradient(linear, left top,
+        left bottom, from(#F8F8F8), to(#FFC6D2))'
+      )
+      $('#tracks .lb-wrap').animate scrollTop: x, 'fast'
       
-        
+  showReport: ->
+    VK.callMethod 'scrollWindow', 0, 30
+    $('#report .modal-body').html "
+      Было обновлено <b>#{@updated_traks}</b>  аудиозаписей.
+      Остальные <b>#{@failed_tracks}</b> записи обновить не удалоь.
+    "
+    $('#report').modal 'show'
+    @ready = @updated_traks = @failed_tracks = 0
 
+  _makeDuration: (dur) ->
+    min = (dur/60).toFixed(0)
+    sec = "#{dur%60}"
+    if sec.length is 1
+      sec = '0' + sec
+    "#{min}:#{sec}"
+
+  err: (data) ->
+    "#{data.error.error_code} #{data.error.error_msg}"
 
 $ ->
   VK.init ->
@@ -153,22 +185,4 @@ $ ->
     app.start()
     console.log app.user.first_name
 
-
-window.l = () ->
-  window.console.log arguments
-window.e = () ->
-  window.console.error arguments
-
-window.err = (data) ->
-  "#{data.error.error_code} #{data.error.error_msg}"
-
-window.makeDuration = (dur) ->
-  min = (dur/60).toFixed(0)
-  sec = "#{dur%60}"
-  if sec.length is 1
-    sec = '0' + sec
-  "#{min}:#{sec}"
-
-window.goToByScroll = (id) ->
-  id = id.replace 'link', ''
   
