@@ -6,27 +6,17 @@ class App < Sinatra::Base
   register Sinatra::AssetPack
 
   assets do
-    serve '/js',     from: 'assets/js'
-    serve '/css',    from: 'assets/css'
-    serve '/images', from: 'assets/images'
-
-    js :app, '/js/app.js', %w{ /assets/js/*.coffee /vendor/js/*.js }
-    css :app, '/css/app.css', %w{ /assets/css/*.scss /vendor/css/*.css }
+    js :app, ['/js/app.coffee', '/vendor/js/*.js']
+    css :app_css, ['/css/app.scss', '/vendor/css/*.css']
 
     js_compression :jsmin
     css_compression :scss
   end
 end
 
-configure do
-  if development?
-    set :debug, true
-  else
-    set :debug, false
-  end
-end
+configure { set :debug, development? ? true : false }
 
 before { content_type :html, charset: 'utf-8' }
 
-get('/'){ haml :index }
+get('/') { haml :index }
 

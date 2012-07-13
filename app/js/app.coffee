@@ -84,7 +84,8 @@ class window.App
               else
                 @improve()
       else
-        console.info "По треку #{ @cur_track.aid } ничего не найдено.."
+        console.info "По треку #{ @cur_track.artist[0..15] } - 
+          #{ @cur_track.title[0..15] } ничего не найдено.."
         @ready += 1
         @updateProgress 'fail'
         @failed_tracks += 1
@@ -94,7 +95,8 @@ class window.App
           @improve()
 
   searchTracks: (track, count..., callback) ->
-    console.info "Поиск трека.. #{ track.aid }"
+    console.info "Поиск трека #{ @cur_track.artist[0..15] } - 
+          #{ @cur_track.title[0..15] }.."
     params = 
       q: "#{app.cur_track.artist} #{app.cur_track.title}"
       auto_complete: 1
