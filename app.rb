@@ -1,9 +1,22 @@
-require 'rubygems'
-require 'sinatra'
-require 'haml'
-require 'coffee-script'
-require 'sass'
-# require 'sinatra-activerecord'
+%w{ rubygems sinatra haml coffee-script sass sinatra/assetpack }.each(&method(:require))
+
+class App < Sinatra::Base
+  set :root, File.dirname(__FILE__)
+
+  register Sinatra::AssetPack
+
+  assets do
+    serve '/js',     from: 'assets/js'
+    serve '/css',    from: 'assets/css'
+    serve '/images', from: 'assets/images'
+
+    js :app, '/js/app.js', %w{ /assets/js/*.coffee /vendor/js/*.js }
+    css :app, '/css/app.css', %w{ /assets/css/*.scss /vendor/css/*.css }
+
+    js_compression :jsmin
+    css_compression :scss
+  end
+end
 
 configure do
   if development?
@@ -13,30 +26,7 @@ configure do
   end
 end
 
-before  do
-  content_type :html, charset: 'utf-8'
-end
+before { content_type :html, charset: 'utf-8' }
 
-get '/' do
-  haml :index
-end
+get('/'){ haml :index }
 
-get '/js/*.js' do
-  content_type 'text/javascript'
-  filename = params[:splat].first
-  coffee filename.to_sym, views: "#{settings.root}/assets/js"
-end
-
-get '/css/*.css' do
-  content_type 'text/css', charset: 'utf-8'
-  filename = params[:splat].first
-  scss filename.to_sym, views: "#{settings.root}/assets/css"
-end
-
-get '/:name' do
-  "hello, #{params[:name]}"
-end
-
-get '/?*' do
-  params[:splat].size
-end
