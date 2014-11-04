@@ -30,6 +30,7 @@ gulp.task 'templates', ->
 gulp.task 'coffee', ->
   gulp.src 'src/**/*.coffee'
     .pipe coffee(bare: true).on('error', gutil.log)
+    .pipe plumber()
     .pipe gulp.dest('build')
     .pipe connect.reload()
 
@@ -43,13 +44,14 @@ gulp.task 'styles', ->
 gulp.task 'uglify', ->
   gulp.src 'build/**/*.js'
     .pipe uglify()
+    .pipe plumber()
     .pipe header(banner)
     .pipe rename('app.min.js')
     .pipe gulp.dest('build')
 
 gulp.task 'js', ->
-  gulp.run 'coffee', ->
-    gulp.run 'uglify', ->
+  gulp.start 'coffee', ->
+    gulp.start 'uglify', ->
 
 gulp.task 'html', ->
   gulp.src 'build/*.html'
@@ -91,7 +93,7 @@ gulp.task 'libs', ->
     .pipe(gulp.dest(dest_path + '/fonts'))
 
 gulp.task 'default', ->
-  gulp.run 'connect'
+  gulp.start ['html', 'styles', 'js', 'connect']
 
   gulp.watch '**/*.jade', ['templates']
   gulp.watch '**/*.html', ['html']

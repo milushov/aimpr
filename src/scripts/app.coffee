@@ -1,29 +1,25 @@
 app = angular.module('aimpr', [])
 
-app.factory 'vk', ->
-  auth = ->
-    console.log('vk.auth')
-
-  getTracks = ->
-    [ {
-      id: 314585455,
-      artist: 'Moby',
-      title: 'Extreme ways',
-      duration: 251,
-    }, {
-      id: 314585087,
-      artist: 'Дэниел Хойт',
-      title: 'Серый фон',
-      duration: 2592,
-    } ]
-
-  auth: auth
-  getTracks: getTracks
-
-app.controller 'trackList', ['$scope', 'vk', ($scope, vk) ->
-    $scope.tracks = vk.getTracks()
-    vk.auth()
-    $scope.makeLulz = ->
-      console.log('lulz')
+app
+  .value('Q', Q)
+  .factory 'VK', ['Q', (Q) ->
+    deferred = Q.defer()
+    VK.init -> deferred.resolve VK
+    deferred.promise
   ]
+
+app.controller 'trackList', ['$scope', 'VK', 'Q', ($scope, VK, Q) ->
+  deferred = Q.defer()
+
+  VK.then (vk) ->
+    vk.api 'friends.get',
+      fields: 'uid,first_name,last_name,photo'
+      user_id: 788157
+      count: 5
+      (data) ->
+        console.log(data)
+        deferred.resolve(data.response)
+
+  #deferred.promise
+]
 
