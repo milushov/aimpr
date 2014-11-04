@@ -1,0 +1,27 @@
+{
+  "name": "aimpr",
+  "version": "0.0.0",
+  "homepage": "https://github.com/milushov/aimpr",
+  "authors": [
+    "Roma Milushov <roma@milushov.ru>"
+  ],
+  "description": "angular app for improving music on vk",
+  "main": "build/index.html",
+  "keywords": [
+    "angular",
+    "vk"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0",
+    "angular": "~1.2.25",
+    "q": "~1.0.1"
+  }
+}
