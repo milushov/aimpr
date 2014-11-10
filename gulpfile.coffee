@@ -1,5 +1,8 @@
 gulp      = require 'gulp'
-$         = require('gulp-load-plugins')(lazy: false)
+$         = require('gulp-load-plugins')
+  lazy:    true
+  pattern: '*' # just for main-bower-files
+
 pkg       = require './package.json'
 banner    = "/*! #{ pkg.name } #{ pkg.version } */\n"
 dest_path = 'build/public'
@@ -19,7 +22,7 @@ gulp.task 'coffee', ->
 
 gulp.task 'styles', ->
   gulp.src 'src/**/*.sass'
-    .pipe $.sass(style: 'compressed')
+   .pipe $.rubySass(style: 'compressed')
     .pipe $.plumber()
     .pipe gulp.dest('build')
     .pipe $.connect.reload()
@@ -50,22 +53,21 @@ gulp.task 'connect', ->
 # grab libraries files from bower_components, minify and push in /public
 gulp.task 'libs', ->
 
-  jsFilter   = $.gulpFilter('*.js')
-  cssFilter  = $.gulpFilter('*.css')
-  fontFilter = $.gulpFilter(['*.eot', '*.woff', '*.svg', '*.ttf'])
+  jsFilter   = $.filter('*.js')
+  cssFilter  = $.filter('*.css')
+  fontFilter = $.filter(['*.eot', '*.woff', '*.svg', '*.ttf'])
 
   gulp.src($.mainBowerFiles())
     .pipe(jsFilter)
-    .pipe(debug(verbose: true))
     .pipe(gulp.dest(dest_path + '/js/vendor'))
-    .pipe(uglify())
+    .pipe($.uglify())
     .pipe($.rename(suffix: '.min'))
     .pipe(gulp.dest(dest_path + '/js/vendor'))
     .pipe(jsFilter.restore())
 
     .pipe(cssFilter)
     .pipe(gulp.dest(dest_path + '/css'))
-    .pipe($.minifycss())
+    .pipe($.minifyCss())
     .pipe($.rename(suffix: '.min'))
     .pipe(gulp.dest(dest_path + '/css'))
     .pipe(cssFilter.restore())
