@@ -20,8 +20,18 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.2.0",
-    "angular": "~1.2.25",
+    "angular": "~1.2.0",
+    "json3": "~3.3.1",
+    "es5-shim": "~3.1.0",
+    "bootstrap-sass-official": "~3.2.0",
+    "angular-cookies": "~1.2.0",
+    "angular-animate": "~1.2.0",
+    "angular-route": "~1.2.0",
     "q": "~1.0.1"
-  }
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.2.0",
+    "angular-scenario": "~1.2.0"
+  },
+  "appPath": "app"
 }
