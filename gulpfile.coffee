@@ -1,52 +1,35 @@
-gulp       = require 'gulp'
-jade       = require 'gulp-jade'
-coffee     = require 'gulp-coffee'
-sass       = require 'gulp-ruby-sass'
-gutil      = require 'gulp-util'
-uglify     = require 'gulp-uglify'
-header     = require 'gulp-header'
-rename     = require 'gulp-rename'
-plumber    = require 'gulp-plumber'
-
-livereload = require 'gulp-livereload'
-connect    = require 'gulp-connect'
-
-flatten        = require 'gulp-flatten'
-gulpFilter     = require 'gulp-filter'
-minifycss      = require 'gulp-minify-css'
-mainBowerFiles = require 'main-bower-files'
-
-
+gulp      = require 'gulp'
+$         = require('gulp-load-plugins')(lazy: false)
 pkg       = require './package.json'
 banner    = "/*! #{ pkg.name } #{ pkg.version } */\n"
 dest_path = 'build/public'
 
 gulp.task 'templates', ->
   gulp.src 'src/templates/index.jade'
-    .pipe jade(pretty: true)
-    .pipe rename('index.html')
+    .pipe $.jade(pretty: true)
+    .pipe $.rename('index.html')
     .pipe gulp.dest('build')
 
 gulp.task 'coffee', ->
   gulp.src 'src/**/*.coffee'
-    .pipe coffee(bare: true).on('error', gutil.log)
-    .pipe plumber()
+    .pipe $.coffee(bare: true).on('error', $.util.log)
+    .pipe $.plumber()
     .pipe gulp.dest('build')
-    .pipe connect.reload()
+    .pipe $.connect.reload()
 
 gulp.task 'styles', ->
   gulp.src 'src/**/*.sass'
-    .pipe sass(style: 'compressed')
-    .pipe plumber()
+    .pipe $.sass(style: 'compressed')
+    .pipe $.plumber()
     .pipe gulp.dest('build')
-    .pipe connect.reload()
+    .pipe $.connect.reload()
 
 gulp.task 'uglify', ->
   gulp.src 'build/**/*.js'
-    .pipe uglify()
-    .pipe plumber()
-    .pipe header(banner)
-    .pipe rename('app.min.js')
+    .pipe $.uglify()
+    .pipe $.plumber()
+    .pipe $.header(banner)
+    .pipe $.rename('app.min.js')
     .pipe gulp.dest('build')
 
 gulp.task 'js', ->
@@ -55,10 +38,10 @@ gulp.task 'js', ->
 
 gulp.task 'html', ->
   gulp.src 'build/*.html'
-    .pipe connect.reload()
+    .pipe $.connect.reload()
 
 gulp.task 'connect', ->
-  connect.server
+  $.connect.server
     livereload: true
     root: 'build'
     https: true
@@ -67,29 +50,28 @@ gulp.task 'connect', ->
 # grab libraries files from bower_components, minify and push in /public
 gulp.task 'libs', ->
 
-  jsFilter   = gulpFilter('*.js')
-  console.log(jsFilter)
-  cssFilter  = gulpFilter('*.css')
-  fontFilter = gulpFilter(['*.eot', '*.woff', '*.svg', '*.ttf'])
+  jsFilter   = $.gulpFilter('*.js')
+  cssFilter  = $.gulpFilter('*.css')
+  fontFilter = $.gulpFilter(['*.eot', '*.woff', '*.svg', '*.ttf'])
 
-  gulp.src(mainBowerFiles())
+  gulp.src($.mainBowerFiles())
     .pipe(jsFilter)
     .pipe(debug(verbose: true))
     .pipe(gulp.dest(dest_path + '/js/vendor'))
     .pipe(uglify())
-    .pipe(rename(suffix: '.min'))
+    .pipe($.rename(suffix: '.min'))
     .pipe(gulp.dest(dest_path + '/js/vendor'))
     .pipe(jsFilter.restore())
 
     .pipe(cssFilter)
     .pipe(gulp.dest(dest_path + '/css'))
-    .pipe(minifycss())
-    .pipe(rename(suffix: '.min'))
+    .pipe($.minifycss())
+    .pipe($.rename(suffix: '.min'))
     .pipe(gulp.dest(dest_path + '/css'))
     .pipe(cssFilter.restore())
 
     .pipe(fontFilter)
-    .pipe(flatten())
+    .pipe($.flatten())
     .pipe(gulp.dest(dest_path + '/fonts'))
 
 gulp.task 'default', ->
