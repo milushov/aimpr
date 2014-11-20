@@ -5,26 +5,9 @@
 # Controller of the aimprApp
 
 angular.module('aimprApp', [])
-  .controller 'trackList', ['$scope', 'VK', 'Q', ($scope, VK, Q) ->
-    deferred = Q.defer()
-
-    VK.then (vk) ->
-      vk.api 'friends.get',
-        fields: 'uid,first_name,last_name,photo'
-        user_id: 788157
-        count: 5
-        (data) ->
-          console.log(data)
-          deferred.resolve(data.response)
-
-    #deferred.promise
+  .controller 'trackList', ['$scope', 'API', 'Q', ($scope, API, Q) ->
+    API.getTracks().then (tracks) ->
+      $scope.tracks = tracks
+      $scope.$digest()
+      console.log($scope.tracks, 'yoooooooo')
   ]
-
-#angular.module('aimprApp')
-  #.controller('MainCtrl', function ($scope) {
-    #$scope.awesomeThings = [
-      #'HTML5 Boilerplate',
-      #'AngularJS',
-      #'Karma'
-    #];
-  #});

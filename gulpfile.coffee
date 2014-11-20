@@ -4,7 +4,8 @@ $         = require('gulp-load-plugins')
   pattern: '*' # just for main-bower-files
 
 pkg       = require './package.json'
-banner    = "/*! #{ pkg.name } #{ pkg.version } */\n"
+cur_date  = new Date().toLocaleString()
+banner    = "/*! #{ pkg.name } #{ pkg.version } #{cur_date} */\n"
 dest_path = 'build/'
 
 gulp.task 'clean', (cb) ->
