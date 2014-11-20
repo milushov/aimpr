@@ -1,17 +1,17 @@
 doctype html
-html(ng-app='aimpr')
+html(ng-app='aimprApp')
 
 head
     title yo app
-    script(src='https://ajax.googleapis.com/ajax/libs/angularjs/1.3.1/angular.js')
-    script(src='https://code.jquery.com/jquery-2.1.1.min.js')
-    script(src='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js')
     script(src='//vk.com/js/api/xd_connection.js?2')
-    script(src='/q.js')
-    script(src='/scripts/app.js')
-    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/styles/style.css')
+    //-script(src='/libs/js/aimpr-lib.js')
+    script(src='/libs/js/angular.js')
+    script(src='/libs/js/angular-route.js')
+    script(src='/libs/js/q.js')
+    script(src='/app.js')
 
+    link(rel='stylesheet', href='/libs/css/aimpr-lib.css')
+    link(rel='stylesheet', href='/app.css')
   body
     .container-fluid.aimpr(ng-controller='trackList')
       .app-header

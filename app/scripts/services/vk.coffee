@@ -1,5 +1,3 @@
-'use strict'
-
 ###*
  # @ngdoc service
  # @name aimprApp.VK
@@ -14,3 +12,4 @@ angular.module('aimprApp')
     VK.init -> deferred.resolve VK
     deferred.promise
   ]
+
