@@ -4,8 +4,8 @@ $         = require('gulp-load-plugins')
   pattern: '*' # just for main-bower-files
 
 pkg       = require './package.json'
-cur_date  = new Date().toLocaleString()
-banner    = "/*! #{ pkg.name } #{ pkg.version } #{cur_date} */\n"
+cur_date  = -> new Date().toLocaleString()
+banner    = -> "/*! #{ pkg.name } #{ pkg.version } #{cur_date()} */\n"
 dest_path = 'build/'
 
 gulp.task 'clean', (cb) ->
@@ -36,7 +36,7 @@ gulp.task 'js', ->
     #.pipe $.jshint.reporter('jshint-stylish')
     .pipe $.concat('app.js')
     .pipe $.plumber()
-    .pipe $.header(banner)
+    .pipe $.header(banner())
     .pipe gulp.dest('build')
     .pipe $.connect.reload()
 

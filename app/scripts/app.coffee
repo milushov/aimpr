@@ -8,11 +8,10 @@
 #/
 
 angular.module('aimprApp', [
-  'ngAnimate'
-  'ngCookies'
+  #'ngAnimate',
+  #'ngCookies'
   'ngRoute'
-]).config ($routeProvider) ->
-  $routeProvider.when('/',
-    templateUrl: 'views/main.html'
-    controller: 'MainCtrl'
-  ).otherwise redirectTo: '/'
+]).config ($routeProvider, $locationProvider) ->
+  # for proper working $location.search()
+  $locationProvider.html5Mode(enabled: true, requireBase: false)
+  $routeProvider.otherwise(controller: 'MainCtrl')

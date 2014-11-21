@@ -7,6 +7,7 @@
  # # API
  # Service in the aimprApp.
 ###
+
 angular.module('aimprApp')
   .factory 'API', ['VK', (VK) ->
     # AngularJS will instantiate a singleton by calling "new" on this function
@@ -15,7 +16,9 @@ angular.module('aimprApp')
       getTracks: ->
         deferred = Q.defer()
         VK.then (vk) ->
-          vk.api 'audio.get', count: 10,
+          vk.api 'audio.get',
+            count: 10,
+            #owner_id: '-35193970',
             (data) ->
               deferred.resolve(data.response)
 
