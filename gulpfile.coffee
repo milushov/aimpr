@@ -8,14 +8,16 @@ cur_date  = -> new Date().toLocaleString()
 banner    = -> "/*! #{ pkg.name } #{ pkg.version } #{cur_date()} */\n"
 dest_path = 'build/'
 
-gulp.task 'clean', (cb) ->
-  $.del 'build', cb
+gulp.task 'clean', (cb) -> $.del 'build', cb
+gulp.task 'remove_images', (cb) -> $.del 'build/images', cb
+gulp.task 'remove_libs', (cb) -> $.del 'build/libs', cb
 
 gulp.task 'views', ->
   gulp.src 'app/**/*.jade'
-    .pipe $.jade(pretty: true)
     .pipe $.plumber()
+    .pipe $.jade(pretty: true)
     .pipe gulp.dest('build')
+    .pipe $.connect.reload()
 
 gulp.task 'templates', ->
   gulp.src ['!build/index.html', 'build/**/*.html']
@@ -25,8 +27,9 @@ gulp.task 'templates', ->
 
 gulp.task 'coffee', ->
   gulp.src 'app/**/*.coffee'
-    .pipe $.coffee(bare: true).on('error', $.util.log)
     .pipe $.plumber()
+    .pipe $.coffee(bare: true)
+    .on('error', $.util.log)
     .pipe gulp.dest('build')
 
 # combine all js files of the build
@@ -73,16 +76,15 @@ gulp.task 'connect', ->
     root: 'build'
     https: true
 
-#gulp.task 'bower', ->
-  #gulp.src 'build/index.html'
-    #.pipe $.wiredep.stream()
-    #.pipe gulp.dest('build')
+gulp.task 'images', ['remove_images'], ->
+  gulp.src 'app/images/**/*'
+    .pipe gulp.dest('build/images')
 
 gulp.task 'build', ->
   $.runSequence 'views', 'templates', 'libs'
-  gulp.start ['styles', 'scripts']
+  gulp.start ['styles', 'scripts', 'images']
 
-gulp.task 'libs', ->
+gulp.task 'libs', ['remove_libs'], ->
   $.runSequence 'get_libs', 'compile_libs'
 
 # http://stackoverflow.com/a/24808013/1171144
@@ -144,4 +146,6 @@ gulp.task 'default', ['clean'], ->
   gulp.watch 'app/**/*.html', ['html', 'templates']
   gulp.watch 'app/**/*.coffee', ['scripts']
   gulp.watch 'app/**/*.sass', ['styles']
+  gulp.watch 'app/images/**/*', ['images']
+  gulp.watch 'bower_components', ['libs']
 
