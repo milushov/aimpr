@@ -1,0 +1,11 @@
+.col-xs-3
+  span.glyphicon(ng-class='{"glyphicon-ok": track.lyrics_id, "glyphicon-remove": !track.lyrics_id }')
+
+.col-xs-7
+  span.track-name {{track.artist + ' - ' + track.title | characters: 42 :false }}
+
+.col-xs-2(ng-if='!helpers.isTrackView()')
+  a.glyphicon.glyphicon-arrow-right(ng-href="/tracks/{{track.aid}}")
+
+.col-xs-2(ng-if='helpers.isTrackView()')
+  a.glyphicon.glyphicon-arrow-left(ng-href="/tracks")

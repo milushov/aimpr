@@ -8,27 +8,21 @@ head
     script(src='/libs/js/angular.js')
     script(src='/libs/js/angular-route.js')
     script(src='/libs/js/truncate.js')
+    script(src='/libs/js/ngStorage.js')
     script(src='/libs/js/q.js')
     script(src='/app.js')
+    script(src='/templates.js')
 
     link(rel='stylesheet', href='/libs/css/aimpr-lib.css')
     link(rel='stylesheet', href='/app.css')
+
   body
-    .container-fluid.aimpr(ng-controller='trackList')
+    .container-fluid.aimpr(ng-controller='MainCtrl')
       .app-header
         .row
           .col-xs-3 всего {{stat.audio_count}}
           .col-xs-3 улучшено {{stat.improved_count}} из {{stat.bad_count}}
           .col-xs-3
             button.btn.btn-primary(ng-click='improve()') Improve!
-      .tracklist
 
-        .row(ng-repeat='track in tracks')
-          .col-xs-1
-            span.glyphicon.glyphicon-play
-
-          .col-xs-2
-            span.glyphicon(ng-class='{"glyphicon-ok": track.lyrics_id, "glyphicon-remove": !track.lyrics_id }')
-
-          .col-xs-9
-            span.track-name {{track.artist + ' - ' + track.title | characters: 42 :false }}
+      ng-view
