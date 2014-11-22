@@ -17,7 +17,7 @@ angular.module('aimprApp')
         deferred = Q.defer()
         VK.then (vk) ->
           vk.api 'audio.get',
-            count: 2,
+            count: 5,
             #owner_id: '-35193970',
             owner_id: '788157',
             (data) ->
