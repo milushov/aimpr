@@ -147,5 +147,4 @@ gulp.task 'default', ['clean'], ->
   gulp.watch 'app/**/*.coffee', ['scripts']
   gulp.watch 'app/**/*.sass', ['styles']
   gulp.watch 'app/images/**/*', ['images']
-  gulp.watch 'bower_components', ['libs']
 

@@ -1,6 +1,6 @@
 {
   "directory": "bower_components",
   "scripts": {
-    "postinstall": "wiredep -s build/index.html"
+    "postinstall": "gulp libs"
   }
 }
