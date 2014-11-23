@@ -36,9 +36,8 @@ angular.module('aimprApp')
 
       tracks = []
       if !$scope.$storage.tracks? || !!$scope.$storage.tracks.length
-        API.getTracks().then (tracks) ->
+        API.getTracks(788157).then (tracks) ->
           # http://binarymuse.github.io/ngInfiniteScroll/demo_basic.html
-          #VK.callMethod("resizeWindow", 510, 600);
           tracks = tracks.slice(1)
           console.info(tracks, 'tracks loaded')
 
@@ -47,6 +46,7 @@ angular.module('aimprApp')
 
           $scope.$storage.tracks = $scope.tracks = tracks
           $scope.$digest()
+          $scope.helpers.resizeIFrame()
 
       $scope.improve = ->
         for track in tracks
@@ -54,6 +54,7 @@ angular.module('aimprApp')
           API.searchTrack(q).then (searched_tracks) ->
             console.info(searched_tracks.slice(1))
           return
+
 
       return
     ]
