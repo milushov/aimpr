@@ -13,7 +13,8 @@ angular.module('aimprApp')
     '$location'
     'ViewHelpers'
     '$sessionStorage'
-    ($scope, $routeParams, API, Q, $location, ViewHelpers, $sessionStorage) ->
+    '$timeout'
+    ($scope, $routeParams, API, Q, $location, ViewHelpers, $sessionStorage, $timeout) ->
 
       $scope.$storage = $sessionStorage
 
@@ -46,7 +47,9 @@ angular.module('aimprApp')
 
           $scope.$storage.tracks = $scope.tracks = tracks
           $scope.$digest()
-          $scope.helpers.resizeIFrame()
+          # http://goo.gl/xxfBVq
+          $timeout (-> $scope.helpers.resizeIFrame()), 10, false
+
 
       $scope.improve = ->
         for track in tracks
