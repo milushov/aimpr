@@ -1,5 +1,8 @@
-.col-xs-3
+.col-xs-1
   span.glyphicon(ng-class='{"glyphicon-ok": track.lyrics_id, "glyphicon-remove": !track.lyrics_id }')
+
+.col-xs-2
+  {{track.$$hashKey}}
 
 .col-xs-7
   span.track-name {{track.artist + ' - ' + track.title | characters: 42 :false }}
