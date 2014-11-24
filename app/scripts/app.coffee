@@ -13,6 +13,7 @@ angular.module('aimprApp', [
   'ngRoute'
   'truncate'
   'ngStorage'
+  'infinite-scroll'
 ]).config ($routeProvider, $locationProvider) ->
 
   # for proper working $location.search()

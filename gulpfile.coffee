@@ -43,6 +43,11 @@ gulp.task 'js', ->
     .pipe gulp.dest('build')
     .pipe $.connect.reload()
 
+  gulp.src 'app/scripts/ng-infinite-scroll-patched.js'
+    .pipe gulp.dest('build')
+    .pipe $.connect.reload()
+
+
 # for production
 gulp.task 'uglify', ->
   gulp.src 'build/app.js'

@@ -48,7 +48,7 @@ angular.module('aimprApp')
           $scope.$storage.tracks = $scope.tracks = tracks
           $scope.$digest()
           # http://goo.gl/xxfBVq
-          $timeout (-> $scope.helpers.resizeIFrame()), 10, false
+          #$timeout (-> $scope.helpers.resizeIFrame()), 100, false
 
 
       $scope.improve = ->
@@ -57,6 +57,9 @@ angular.module('aimprApp')
           API.searchTrack(q).then (searched_tracks) ->
             console.info(searched_tracks.slice(1))
           return
+
+      $scope.loadMore = ->
+        console.info('load more')
 
 
       return
