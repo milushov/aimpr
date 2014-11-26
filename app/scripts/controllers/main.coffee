@@ -30,8 +30,10 @@ angular.module('aimprApp')
       $scope.helpers = ViewHelpers
 
       $scope.per_page = 20
-      $scope.cur_page = 1
+      $scope.cur_page = 0
       $scope.is_loading = true
+      $scope.per_part = 100
+      $scope.cur_part = 0
 
       params = $location.search()
       $scope.$storage.init_params = if params.access_token? then  params
@@ -42,27 +44,34 @@ angular.module('aimprApp')
       $scope.stat.audio_count = api_result.response.audio_count
 
       tracks = []
-      if !$scope.$storage.tracks? || !!$scope.$storage.tracks.length
-        API.getTracks(788157).then (tracks) ->
-          tracks = tracks.slice(1)
-          #console.info(tracks, 'tracks loaded')
+      $scope.$storage.tracks = []
+      $scope.tracks = []
 
-          start = ($scope.cur_page - 1) * $scope.per_page
+      getTracks = () ->
+        offset = $scope.per_part * $scope.cur_part
+
+        API.getTracks(788157, offset).then (tracks) ->
+          tracks = tracks.slice(1)
+
+          start = ($scope.cur_page) * $scope.per_page
           end = start + $scope.per_page - 1
           rendered_tracks = tracks[start..end]
+          $scope.stat.bad_count = (tracks.filter (el) -> !el.lyrics_id?).length
 
-          for track in tracks
-            $scope.stat.bad_count += 1 unless track.lyrics_id # change to filter or map
+          $scope.$storage.tracks = $scope.$storage.tracks.concat(tracks)
+          $scope.tracks = $scope.tracks.concat(rendered_tracks)
+          $scope.$apply()
 
-          $scope.$storage.tracks = tracks
-          $scope.tracks = rendered_tracks
-          $scope.$digest()
           # http://goo.gl/xxfBVq
           $timeout (-> $scope.helpers.resizeIFrame()), 100, false
           #$scope.$on('$viewContentLoaded', $scope.helpers.resizeIFrame()))
           #$scope.$on('$includeContentLoaded', $scope.helpers.resizeIFrame()))
           $scope.is_loading = false
+          $scope.cur_page += 1
+          $scope.cur_part += 1
 
+
+      getTracks() if !$scope.$storage.tracks? || !$scope.$storage.tracks.length
 
       $scope.improve = ->
         for track in tracks
@@ -80,6 +89,8 @@ angular.module('aimprApp')
         start = ($scope.cur_page - 1) * $scope.per_page
         end = start + $scope.per_page - 1
         rendered_tracks = $scope.$storage.tracks[start..end]
+
+        rendered_tracks.forEach (track) -> track.page = $scope.cur_page
         console.info(start, end)
 
         $scope.tracks = $scope.tracks.concat(rendered_tracks)
@@ -87,6 +98,15 @@ angular.module('aimprApp')
         $scope.$apply()
         $timeout (-> $scope.is_loading = false), 1000, false
         $timeout (-> $scope.helpers.resizeIFrame()), 100, false
+
+        if isAlmostLastPart()
+          getTracks()
+          console.info('almost last part')
+
+      isAlmostLastPart = ->
+        all_tacks_count = $scope.$storage.tracks.length
+        last_page = Math.floor(all_tacks_count / $scope.per_page)
+        $scope.cur_page is last_page
 
 
       initScroll (scroll, height) ->

@@ -13,11 +13,12 @@ angular.module('aimprApp')
     # AngularJS will instantiate a singleton by calling "new" on this function
 
     return {
-      getTracks: (uid) ->
+      getTracks: (uid, offset = 0) ->
         deferred = Q.defer()
         VK.then (vk) ->
           vk.api 'audio.get',
-            count: 100,
+            count: 100
+            offset: offset
             #owner_id: '-35193970',
             owner_id: uid,
             (data) ->
