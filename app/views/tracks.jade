@@ -1,8 +1,6 @@
 label(for='is_loading') is loading?
 input#is_loading(ng-model='is_loading', type='checkbox')
 
-.scroll-container#parent
-  .intermidiatediv.tracklist(infinite-scroll-container="'#parent'" infinite-scroll="loadMore()" infinite-scroll-distance="0" infinite-scroll-parent="true" infinite-scroll-disabled="is_loading")
-
-    .row(ng-repeat='track in tracks track by $index')
-      div(ng-include='"views/shared/_track.html"')
+.tracklist
+  .row(ng-repeat='track in tracks track by $index')
+    div(ng-include='"views/shared/_track.html"')

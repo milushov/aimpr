@@ -14,7 +14,9 @@ angular.module('aimprApp')
     'ViewHelpers'
     '$sessionStorage'
     '$timeout'
-    ($scope, $routeParams, API, Q, $location, ViewHelpers, $sessionStorage, $timeout) ->
+    'initScroll'
+    '$window'
+    ($scope, $routeParams, API, Q, $location, ViewHelpers, $sessionStorage, $timeout, initScroll, $window) ->
 
       $scope.$storage = $sessionStorage
 
@@ -43,7 +45,7 @@ angular.module('aimprApp')
       if !$scope.$storage.tracks? || !!$scope.$storage.tracks.length
         API.getTracks(788157).then (tracks) ->
           tracks = tracks.slice(1)
-          console.info(tracks, 'tracks loaded')
+          #console.info(tracks, 'tracks loaded')
 
           start = ($scope.cur_page - 1) * $scope.per_page
           end = start + $scope.per_page - 1
@@ -56,7 +58,9 @@ angular.module('aimprApp')
           $scope.tracks = rendered_tracks
           $scope.$digest()
           # http://goo.gl/xxfBVq
-          #$timeout (-> $scope.helpers.resizeIFrame()), 100, false
+          $timeout (-> $scope.helpers.resizeIFrame()), 100, false
+          #$scope.$on('$viewContentLoaded', $scope.helpers.resizeIFrame()))
+          #$scope.$on('$includeContentLoaded', $scope.helpers.resizeIFrame()))
           $scope.is_loading = false
 
 
@@ -67,16 +71,26 @@ angular.module('aimprApp')
             console.info(searched_tracks.slice(1))
           return
 
-      $scope.loadMore = ->
-        console.info('load more')
+      loadMore = ->
         return if $scope.is_loading
+        console.info('load more')
+
+        $scope.is_loading = true
 
         start = ($scope.cur_page - 1) * $scope.per_page
         end = start + $scope.per_page - 1
         rendered_tracks = $scope.$storage.tracks[start..end]
+        console.info(start, end)
 
         $scope.tracks = $scope.tracks.concat(rendered_tracks)
         $scope.cur_page += 1
+        $scope.$apply()
+        $timeout (-> $scope.is_loading = false), 1000, false
+        $timeout (-> $scope.helpers.resizeIFrame()), 100, false
+
+
+      initScroll (scroll, height) ->
+        loadMore() if ($window.innerHeight - (scroll + height)) < 200
 
       return
     ]
