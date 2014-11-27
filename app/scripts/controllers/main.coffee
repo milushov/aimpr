@@ -86,7 +86,7 @@ angular.module('aimprApp')
 
         $scope.is_loading = true
 
-        start = ($scope.cur_page - 1) * $scope.per_page
+        start = ($scope.cur_page) * $scope.per_page
         end = start + $scope.per_page - 1
         rendered_tracks = $scope.$storage.tracks[start..end]
 
@@ -107,7 +107,6 @@ angular.module('aimprApp')
         all_tacks_count = $scope.$storage.tracks.length
         last_page = Math.floor(all_tacks_count / $scope.per_page)
         $scope.cur_page is last_page
-
 
       initScroll (scroll, height) ->
         loadMore() if ($window.innerHeight - (scroll + height)) < 200
