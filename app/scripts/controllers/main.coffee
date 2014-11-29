@@ -6,16 +6,7 @@
 
 angular.module('aimprApp')
   .controller 'MainCtrl', [
-    '$scope'
-    '$routeParams'
-    'API'
-    'Q'
-    '$location'
-    'ViewHelpers'
-    '$sessionStorage'
-    '$timeout'
-    'initScroll'
-    '$window'
+    '$scope', '$routeParams', 'API', 'Q', '$location', 'ViewHelpers', '$sessionStorage', '$timeout', 'initScroll', '$window'
     ($scope, $routeParams, API, Q, $location, ViewHelpers, $sessionStorage, $timeout, initScroll, $window) ->
 
       $scope.$storage = $sessionStorage
@@ -29,11 +20,16 @@ angular.module('aimprApp')
       console.info('MainCtrl')
       $scope.helpers = ViewHelpers
 
-      $scope.per_page = 20
-      $scope.cur_page = 0
-      $scope.is_loading = true
-      $scope.per_part = 100
-      $scope.cur_part = 0
+      angular.extend $scope,
+        per_page:   20
+        cur_page:   0
+        is_loading: true
+        per_part:   100
+        cur_part:   0
+
+        cur_selected_track: null
+
+
 
       params = $location.search()
       $scope.$storage.init_params = if params.access_token? then  params
@@ -110,6 +106,13 @@ angular.module('aimprApp')
 
       initScroll (scroll, height) ->
         loadMore() if ($window.innerHeight - (scroll + height)) < 200
+
+      $scope.showTrack = (aid) ->
+        console.info('show track')
+        $scope.cur_selected_track = aid
+
+      $scope.isTrackSelected = (aid) ->
+        $scope.cur_selected_track is aid
 
       return
     ]

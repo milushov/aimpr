@@ -25,9 +25,4 @@ angular.module('aimprApp', [
       controller: 'MainCtrl'
     )
 
-    .when('/tracks/:trackId',
-      templateUrl: '/views/track.html'
-      controller: 'TrackCtrl'
-    )
-
     .otherwise redirectTo: '/'

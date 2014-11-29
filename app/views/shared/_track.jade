@@ -1,14 +1,17 @@
-.col-xs-1
-  span.glyphicon(ng-class='{"glyphicon-ok": track.lyrics_id, "glyphicon-remove": !track.lyrics_id }')
+.row
+  .col-xs-1
+    span.glyphicon(ng-class='{"glyphicon-ok": track.lyrics_id, "glyphicon-remove": !track.lyrics_id }')
 
-.col-xs-2
-  {{track.page}}
+  .col-xs-2
+    {{track.page}}
 
-.col-xs-7
-  span.track-name {{track.artist + ' - ' + track.title | characters: 42 :false }}
+  .col-xs-9
+    a.track-name(ng-click='showTrack(track.aid)') {{track.artist + ' - ' + track.title | characters: 42 :false }}
 
-.col-xs-2(ng-if='!helpers.isTrackView()')
-  a.glyphicon.glyphicon-arrow-right(ng-href="/tracks/{{track.aid}}")
-
-.col-xs-2(ng-if='helpers.isTrackView()')
-  a.glyphicon.glyphicon-arrow-left(ng-href="/tracks")
+.row(ng-if="isTrackSelected(track.aid)")
+  .col-xs-1
+  .col-xs-10
+    | Cubilia Curae; Curabitur consequat leo et dui. Aenean ligula mi,
+    | dignissim.  Consequat erat at massa. Vivamus id mi. Morbi purus enim,
+    | dapibus a, facilisis non, tincidunt at, enim. Vestibulum ante ipsum primis.
+  .col-xs-1
