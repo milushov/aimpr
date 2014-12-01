@@ -6,28 +6,28 @@
 
 angular.module('aimprApp')
   .controller 'TracksCtrl', [
-    '$scope', '$routeParams', 'API', 'Q', '$location', 'ViewHelpers', '$sessionStorage', '$timeout', 'initScroll', '$window', 'Stat'
-    ($scope, $routeParams, API, Q, $location, ViewHelpers, $sessionStorage, $timeout, initScroll, $window, Stat) ->
+    '$scope', '$rootScope', '$routeParams', 'API', 'Q', '$location', 'ViewHelpers', '$sessionStorage', '$timeout', 'initScroll', '$window', 'Stat'
+    ($scope, $rootScope, $routeParams, API, Q, $location, ViewHelpers, $sessionStorage, $timeout, initScroll, $window, Stat) ->
 
       #$scope.stat = Stat
 
       console.info('MainCtrl')
       $scope.helpers = ViewHelpers
 
-      angular.extend $scope,
-        per_page:   30
-        cur_page:   1
-        is_loading: true
-        per_part:   100
-        cur_part:   1
-        cur_selected_track: null
-
-
       params = $location.search()
 
       #api_result  = JSON.parse params.api_result
-      viewer_id   = params.viewer_id
       #$scope.stat.audio_count = api_result.response.audio_count
+
+      cur_selected_track = null
+      cur_user = params.viewer_id
+
+      angular.extend $scope,
+        per_page:   30
+        cur_page:   1
+        per_part:   100
+        cur_part:   1
+        is_loading: true
 
 
       renderPage = ->
@@ -43,7 +43,7 @@ angular.module('aimprApp')
           offset: $scope.per_part * ($scope.cur_part - 1)
         }
 
-        API.getTracks(788157, prms).then (tracks) ->
+        API.getTracks(cur_user, prms).then (tracks) ->
           $scope.tracks = ($scope.tracks || []).concat(tracks.items)
 
           renderPage()
@@ -52,7 +52,7 @@ angular.module('aimprApp')
           $scope.$apply()
 
           # http://goo.gl/xxfBVq
-          $timeout (-> $scope.helpers.resizeIFrame()), 1000, false
+          $timeout (-> $scope.helpers.resizeIFrame()), 100, false
           #$scope.$on('$viewContentLoaded', $scope.helpers.resizeIFrame()))
           #$scope.$on('$includeContentLoaded', $scope.helpers.resizeIFrame()))
 
@@ -83,6 +83,7 @@ angular.module('aimprApp')
 
         getTracks() if isAlmostLastPart()
 
+
       isAlmostLastPart = ->
         all_tacks_count = $scope.tracks.length
         last_page = Math.floor(all_tacks_count / $scope.per_page)
@@ -97,28 +98,37 @@ angular.module('aimprApp')
         track = ($scope.tracks.filter (t) -> t.id == aid)[0]
         console.info('show track', track)
 
-        if $scope.cur_selected_track is aid
-          return $scope.cur_selected_track = null
+        if cur_selected_track is aid
+          return cur_selected_track = null
         else
-          $scope.cur_selected_track = aid
+          cur_selected_track = aid
 
         if (lid = track.lyrics_id)? and !track.lyrics_text
           track.is_loading = yes
           API.getLyrics(lid).then (resp) ->
             track.is_loading = no
             if resp.text?
-              $scope.$apply -> track.lyrics_text = resp.text
+              $scope.$apply ->
+                track.lyrics_text = resp.text
             else
               console.error(resp)
 
         else
           # render partial for selecting proper text
 
+        $timeout (-> $scope.helpers.resizeIFrame()), 100, false
+
 
       $scope.isTrackSelected = (aid) ->
-        $scope.cur_selected_track is aid
+        cur_selected_track is aid
 
-      $scope.showUserTracks = (id) =>
+
+      $rootScope.$on 'showUserTracks', (e, id) ->
+        cur_user = id
+        $scope.tracks = $scope.rendered_tracks = []
+        $scope.cur_part = $scope.cur_page = 1
+        getTracks()
+
 
       return
     ]

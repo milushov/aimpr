@@ -102,6 +102,10 @@ angular.module('aimprApp')
       else
         renderPage('cur')
 
+    $scope.showUserTracks = (id) ->
+      $scope.$emit('showUserTracks', id)
+
+
     return
 
 
