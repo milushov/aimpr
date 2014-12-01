@@ -1,6 +1,3 @@
-label(for='is_loading') is loading?
-input#is_loading(ng-model='is_loading', type='checkbox')
-
 .tracklist
-  .row(ng-repeat='track in tracks track by $index')
+  .row(ng-repeat='track in rendered_tracks track by $index')
     div(ng-include='"views/shared/_track.html"')

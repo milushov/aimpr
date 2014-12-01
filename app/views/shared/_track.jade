@@ -7,12 +7,12 @@
       .spinner-icon
 
   .col-xs-1
-    | {{track.page}}
+    |{{track.id | limitTo:4}}
 
   .col-xs-9
-    a.track-name(ng-click='showTrack(track.aid)') {{track.artist + ' - ' + track.title | characters: 42 :false }}
+    a.track-name(ng-click='showTrack(track.id)') {{track.artist + ' - ' + track.title | characters: 42 :false }}
 
-.row(ng-if='isTrackSelected(track.aid)')
+.row(ng-if='isTrackSelected(track.id)')
   .col-xs-1
   .col-xs-10(ng-if='track.lyrics_text')
     #cur-track-lyrics {{track.lyrics_text}}

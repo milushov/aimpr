@@ -18,6 +18,7 @@ angular.module('aimprApp')
       cur_part:   1
       is_loading: false
 
+
     renderPage = (dir) ->
       max_page = Math.ceil(friends_count / $scope.per_page)
 
@@ -35,8 +36,8 @@ angular.module('aimprApp')
 
       start = $scope.per_page * ($scope.cur_page - 1)
       end   = start + $scope.per_page - 1
-      console.info(start: start, end: end)
       $scope.rendered_friends = $scope.friends[start..end]
+
 
     getFriends = () ->
       prms = {
@@ -52,20 +53,25 @@ angular.module('aimprApp')
         $scope.cur_part += 1
         $scope.$apply()
 
+
     getFriends()
+
 
     $scope.showPart = (direction) ->
       renderPage(direction)
       getFriends() if isAlmostLastPage()
 
+
     isAlmostLastPage = ->
       last_page = Math.ceil($scope.friends.length / $scope.per_page) - 1
       $scope.cur_page is last_page
+
 
     searchFriendsByName = (name) ->
       regexp = new RegExp(name, 'gim')
       $scope.friends.filter (friend) ->
         regexp.test(friend.first_name) || regexp.test(friend.last_name)
+
 
     $scope.getFriendsByName = (name) ->
       if name.length > 1

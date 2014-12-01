@@ -20,14 +20,14 @@ angular.module('aimprApp')
         )
 
     return {
-      getTracks: (uid, offset = 0) ->
+      getTracks: (uid, prms = {}) ->
         d = Q.defer()
         VK.then (vk) ->
           vk.api 'audio.get',
-            count: 100
-            offset: offset
+            count: prms.count || 100
+            offset: prms.offset
             #owner_id: '-35193970',
-            owner_id: uid,
+            owner_id: uid
             (data) -> processResponse(data, d)
         d.promise
 

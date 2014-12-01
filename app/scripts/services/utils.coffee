@@ -16,7 +16,7 @@ angular.module('aimprApp')
       deferred.resolve VK
     , ->
       console.error('error with VK init')
-    , '5.8'
+    , '5.27'
     deferred.promise
   ]
 
