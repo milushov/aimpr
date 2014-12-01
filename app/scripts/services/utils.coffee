@@ -12,7 +12,11 @@ angular.module('aimprApp')
 
   .factory 'VK', ['Q', (Q) ->
     deferred = Q.defer()
-    VK.init -> deferred.resolve VK
+    VK.init ->
+      deferred.resolve VK
+    , ->
+      console.error('error with VK init')
+    , '5.8'
     deferred.promise
   ]
 

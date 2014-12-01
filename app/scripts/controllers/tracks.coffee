@@ -5,17 +5,12 @@
 # Controller of the aimprApp
 
 angular.module('aimprApp')
-  .controller 'MainCtrl', [
-    '$scope', '$routeParams', 'API', 'Q', '$location', 'ViewHelpers', '$sessionStorage', '$timeout', 'initScroll', '$window'
-    ($scope, $routeParams, API, Q, $location, ViewHelpers, $sessionStorage, $timeout, initScroll, $window) ->
+  .controller 'TracksCtrl', [
+    '$scope', '$routeParams', 'API', 'Q', '$location', 'ViewHelpers', '$sessionStorage', '$timeout', 'initScroll', '$window', 'Stat'
+    ($scope, $routeParams, API, Q, $location, ViewHelpers, $sessionStorage, $timeout, initScroll, $window, Stat) ->
 
       $scope.$storage = $sessionStorage
-
-      $scope.stat = {
-        audio_count: 0
-        improved_count: 0
-        bad_count: 0
-      }
+      $scope.stat = Stat
 
       console.info('MainCtrl')
       $scope.helpers = ViewHelpers
@@ -28,7 +23,6 @@ angular.module('aimprApp')
         cur_part:   0
 
         cur_selected_track: null
-
 
 
       params = $location.search()
@@ -108,11 +102,32 @@ angular.module('aimprApp')
         loadMore() if ($window.innerHeight - (scroll + height)) < 200
 
       $scope.showTrack = (aid) ->
-        console.info('show track')
-        $scope.cur_selected_track = aid
+        track = ($scope.tracks.filter (t) -> t.aid == aid)[0]
+        console.info('show track', track)
+
+        if $scope.cur_selected_track is aid
+          return $scope.cur_selected_track = null
+        else
+          $scope.cur_selected_track = aid
+
+        if (lid = track.lyrics_id)? and !track.lyrics_text
+          track.is_loading = yes
+          API.getLyrics(lid).then (resp) ->
+            track.is_loading = no
+            if resp.text?
+              $scope.$apply -> track.lyrics_text = resp.text
+            else
+              console.error(resp)
+
+        else
+          # render partial for selecting proper text
+
+
 
       $scope.isTrackSelected = (aid) ->
         $scope.cur_selected_track is aid
+
+      $scope.showUserTracks = (id) =>
 
       return
     ]

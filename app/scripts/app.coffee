@@ -13,7 +13,7 @@ angular.module('aimprApp', [
   'ngRoute'
   'truncate'
   'ngStorage'
-  'infinite-scroll'
+  'cgNotify'
 ]).config ($routeProvider, $locationProvider) ->
 
   # for proper working $location.search()
@@ -22,7 +22,7 @@ angular.module('aimprApp', [
   $routeProvider
     .when('/',
       templateUrl: '/views/tracks.html'
-      controller: 'MainCtrl'
+      controller: 'TracksCtrl'
     )
 
     .otherwise redirectTo: '/'

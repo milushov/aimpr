@@ -9,49 +9,71 @@
 ###
 
 angular.module('aimprApp')
-  .factory 'API', ['VK', (VK) ->
-    # AngularJS will instantiate a singleton by calling "new" on this function
+  .factory 'API', ['VK', 'notify', (VK, notify) ->
+    processResponse = (data, deferred) ->
+      if (resp = data.response)?
+        deferred.resolve(resp)
+      else
+        notify(
+          message: data.error.error_msg
+          classes: 'alert-danger'
+        )
 
     return {
       getTracks: (uid, offset = 0) ->
-        deferred = Q.defer()
+        d = Q.defer()
         VK.then (vk) ->
           vk.api 'audio.get',
             count: 100
             offset: offset
             #owner_id: '-35193970',
             owner_id: uid,
-            (data) ->
-              deferred.resolve(data.response)
+            (data) -> processResponse(data, d)
+        d.promise
 
-        deferred.promise
-
-      searchTrack: (q) ->
-        deferred = Q.defer()
+      searchTrack: (q, own = 0) ->
+        lyrics = if own? then 0 else 1
+        d = Q.defer()
 
         VK.then (vk) ->
           vk.api 'audio.search',
             q: q
             auto_complete: 1
-            lyrics: 1
-            sort: 2
-            search_own: 0
+            lyrics: lyrics
+            sort: 0
+            search_own: own
             count: 5
-            (data) ->
-              deferred.resolve(data.response)
+            (data) -> processResponse(data, d)
+        d.promise
 
-        deferred.promise
+      getLyrics: (lid) ->
+        d = Q.defer()
+        VK.then (vk) ->
+          vk.api 'audio.getLyrics',
+            lyrics_id: lid
+            (data) -> processResponse(data, d)
+        d.promise
 
       saveTrack: (oid, aid, text)->
-        deferred = Q.defer()
+        d = Q.defer()
         VK.then (vk) ->
           vk.api 'audio.edit',
             owner_id: oid
             audio_id: aid
             text:     text
-            (data) ->
-              deferred.resolve(data.response)
+            (data) -> processResponse(data, d)
+        d.promise
 
-        deferred.promise
+      getFriends: (uid, prms = {})->
+        d = Q.defer()
+        VK.then (vk) ->
+          vk.api 'friends.get',
+            user_id: uid
+            order:   'name'
+            fields:  'nickname,domain,photo_50'
+            count:   prms.count
+            offset:  prms.offset
+            (data) -> processResponse(data, d)
+        d.promise
     }
   ]
