@@ -10,4 +10,6 @@
 angular.module('aimprApp')
   .controller 'InfoCtrl', ['$scope', 'Stat', ($scope, Stat) ->
     $scope.stat = Stat
+    $scope.improveList = ->
+      $scope.$emit('improveList')
   ]

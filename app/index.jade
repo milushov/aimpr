@@ -4,6 +4,7 @@ html(ng-app='aimprApp')
 head
     title yo app
     script(src='//vk.com/js/api/xd_connection.js?2')
+    script(src='/libs/js/index.js')
     //-script(src='/libs/js/aimpr-lib.js')
     //-script(src='/libs/js/jquery.js')
     script(src='/libs/js/angular.js')
@@ -26,7 +27,7 @@ head
         .col-xs-3 всего {{audio_count}}
         .col-xs-6 улучшено {{improved_count}} из {{bad_count}}
         .col-xs-3
-          button.btn.btn-primary(ng-click='improve()') Improve!
+          button.btn.btn-primary(ng-click='improveList()') Improve!
 
       .row
         .col-xs-9(ng-view)
