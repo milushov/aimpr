@@ -9,10 +9,14 @@
 ###
 
 angular.module('aimprApp')
-  .factory 'API', ['VK', 'notify', (VK, notify) ->
+  .factory 'API', ['$http', 'VK', 'notify', ($http, VK, notify) ->
 
-    getApiUrl = (name, q, key) ->
-      ''
+    getApiUrl = (sitename, artist, title) ->
+      domain = unless /localhost/.test(location.hostname)
+        'http://localhost:5000'
+      else 'https://aimpr.milushov.ru'
+      [domain, sitename, artist, title].join('/')
+
 
     processResponse = (data, deferred) ->
       if (resp = data.response)?
@@ -22,6 +26,7 @@ angular.module('aimprApp')
           message: data.error.error_msg
           classes: 'alert-danger'
         )
+
 
     return {
       getTracks: (uid, prms = {}) ->
@@ -108,13 +113,13 @@ angular.module('aimprApp')
             (data) -> processResponse(data, d)
         d.promise
 
-      getLyricsFromApi: (q) ->
+      getLyricsFromApi: (sitename, artist, title) ->
         d = Q.defer()
-
-        url = getApiUrl('metrolyrics', q, )
-        $http.get().success (data) ->
+        url = getApiUrl(sitename, artist, title)
+        $http.get(url).success (data) ->
           processResponse(data, d)
-
+        .error (data) ->
+          console.info(data)
         d.promise
     }
   ]

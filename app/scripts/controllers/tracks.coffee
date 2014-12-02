@@ -84,6 +84,10 @@ angular.module('aimprApp')
               track.lyrics_vk = texts.items
               track.lyrics_text = determineBestText(texts.items)
               console.info(track)
+
+              API.getLyricsFromApi('musixmatch', track.artist, track.title).then (data) ->
+                debugger
+
             else
               track.state = 'text_not_finded'
               console.info('text_not_finded')
