@@ -11,21 +11,23 @@
 angular.module('aimprApp')
   .factory 'API', ['$http', 'VK', 'notify', ($http, VK, notify) ->
 
-    getApiUrl = (sitename, artist, title) ->
+    getApiUrl = (q) ->
       domain = unless /localhost/.test(location.hostname)
         'http://localhost:5000'
       else 'https://aimpr.milushov.ru'
-      [domain, sitename, artist, title].join('/')
+      "#{domain}/search/#{q}"
 
 
     processResponse = (data, deferred) ->
       if (resp = data.response)?
         deferred.resolve(resp)
       else
+        error_msg = data.error?.error_msg || data.error
         notify(
-          message: data.error.error_msg
+          message: error_msg
           classes: 'alert-danger'
         )
+        deferred.reject(new Error(error_msg))
 
 
     return {
@@ -113,10 +115,9 @@ angular.module('aimprApp')
             (data) -> processResponse(data, d)
         d.promise
 
-      getLyricsFromApi: (sitename, artist, title) ->
+      getLyricsFromApi: (q) ->
         d = Q.defer()
-        url = getApiUrl(sitename, artist, title)
-        $http.get(url).success (data) ->
+        $http.get(getApiUrl(q)).success (data) ->
           processResponse(data, d)
         .error (data) ->
           console.info(data)

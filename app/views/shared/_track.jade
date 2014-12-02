@@ -14,8 +14,8 @@
 
 .row(ng-if='isTrackSelected(track.id)')
   .col-xs-1
-  .col-xs-10(ng-if='track.lyrics_text')
-    #cur-track-lyrics {{track.lyrics_text}}
-  .col-xs-10(ng-if='!track.lyrics_text')
+
+  .col-xs-10
     ng-include(src='"views/shared/_get_text.html"')
+
   .col-xs-1

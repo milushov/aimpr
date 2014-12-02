@@ -6,8 +6,8 @@
 
 angular.module('aimprApp')
   .controller 'TracksCtrl', [
-    '$scope', '$rootScope', '$interval', '$routeParams', 'API', 'Q', '$location', 'ViewHelpers', '$sessionStorage', '$timeout', 'initScroll', '$window', 'Stat'
-    ($scope, $rootScope, $interval, $routeParams, API, Q, $location, ViewHelpers, $sessionStorage, $timeout, initScroll, $window, Stat) ->
+    '$scope', '$rootScope', '$interval', '$routeParams', 'API', 'LyricsProcessor', 'Q', '$location', 'ViewHelpers', '$sessionStorage', '$timeout', 'initScroll', '$window', 'Stat'
+    ($scope, $rootScope, $interval, $routeParams, API, LyricsProcessor, Q, $location, ViewHelpers, $sessionStorage, $timeout, initScroll, $window, Stat) ->
 
       #$scope.stat = Stat
 
@@ -60,41 +60,8 @@ angular.module('aimprApp')
       getTracks()
 
 
-      determineBestText = (texts) ->
-        texts[0]
-
-
-      is_processing = no
       $rootScope.$on 'improveList', ->
-        return alert('processing already started') if is_processing
-        is_processing = yes
-        queue = Object.keys($scope.tracks)[0..2]
-
-        stop_time = $interval ->
-          track = $scope.tracks[queue.shift()]
-          track.is_loading = yes
-          q = "#{track.artist} #{track.title}"
-
-          API.searchTracksWithLyrics(q).then (texts) ->
-            track.is_loading = no
-
-            if texts.count?
-              track.state = 'text_finded'
-              track.need_to_save = yes # just for dev
-              track.lyrics_vk = texts.items
-              track.lyrics_text = determineBestText(texts.items)
-              console.info(track)
-
-              API.getLyricsFromApi('musixmatch', track.artist, track.title).then (data) ->
-                debugger
-
-            else
-              track.state = 'text_not_finded'
-              console.info('text_not_finded')
-
-            $interval.cancel(stop_time) if queue.length is 0
-
-        , 333
+        LyricsProcessor.improveList($scope.tracks)
 
 
       loadMore = ->
