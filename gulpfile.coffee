@@ -43,11 +43,6 @@ gulp.task 'js', ->
     .pipe gulp.dest('build')
     .pipe $.connect.reload()
 
-  gulp.src 'app/scripts/ng-infinite-scroll-patched.js'
-    .pipe gulp.dest('build')
-    .pipe $.connect.reload()
-
-
 # for production
 gulp.task 'uglify', ->
   gulp.src 'build/app.js'
@@ -60,7 +55,7 @@ gulp.task 'scripts', ->
   $.runSequence 'coffee', 'js', 'uglify'
 
 gulp.task 'styles', ->
-  gulp.src 'app/**/*.sass'
+  gulp.src ['app/**/*.sass', 'app/**/*.scss']
     .pipe $.plumber()
     .pipe $.rubySass()
     .pipe $.autoprefixer('last 3 version')
@@ -150,6 +145,6 @@ gulp.task 'default', ['clean'], ->
   gulp.watch 'app/**/*.jade', -> $.runSequence 'views'
   gulp.watch 'app/**/*.html', ['html', 'templates']
   gulp.watch 'app/**/*.coffee', ['scripts']
-  gulp.watch 'app/**/*.sass', ['styles']
+  gulp.watch ['app/**/*.sass', 'app/**/*.scss'], ['styles']
   gulp.watch 'app/images/**/*', ['images']
 

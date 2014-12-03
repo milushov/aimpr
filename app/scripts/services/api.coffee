@@ -128,7 +128,7 @@ angular.module('aimprApp')
       getLyricsFromApi: (track) ->
         q = "#{track.artist} #{track.title}"
         d = Q.defer()
-        $http.get(getApiUrl(q)).success (data) ->
+        $http.get(getApiUrl(q), timeout: 4000).success (data) ->
           processResponse(data, d)
         .error (data, status, headers, config) ->
           processServerError(data, status, d)

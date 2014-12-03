@@ -89,28 +89,16 @@ angular.module('aimprApp')
       initScroll (scroll, height) ->
         loadMore() if ($window.innerHeight - (scroll + height)) < 200
 
+      $rootScope.getCurTrack = -> $rootScope.cur_track
 
-      $scope.showTrack = (aid) ->
-        track = ($scope.tracks.filter (t) -> t.id == aid)[0]
-        console.info('show track', track)
+      $scope.showTrack = (id) ->
+        $rootScope.cur_track = ($scope.tracks.filter (t) -> t.id == id)[0]
+        #console.info('show track', track)
 
-        if cur_selected_track is aid
+        if cur_selected_track is id
           return cur_selected_track = null
         else
-          cur_selected_track = aid
-
-        if (lid = track.lyrics_id)? and !track.lyrics_text
-          track.is_loading = yes
-          API.getLyrics(lid).then (resp) ->
-            track.is_loading = no
-            if resp.text?
-              $scope.$apply ->
-                track.lyrics_text = resp.text
-            else
-              console.error(resp)
-
-        else
-          # render partial for selecting proper text
+          cur_selected_track = id
 
         $timeout (-> $scope.helpers.resizeIFrame()), 100, false
 

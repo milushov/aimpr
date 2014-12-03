@@ -1,2 +1,16 @@
 div(ng-controller='BestLyricsCtrl')
-| select text please
+  {{cur_track.lyrics | json}}
+
+  .tab
+    ul.tabs
+      li(ng-repeat='(site, _) in  cur_track.lyrics')
+        a(href='#') {{site}}
+      | &#x9;&#x9;
+
+      li
+        a.btn.btn-primary(href='#') Сохранить
+
+
+    .tab_content
+      .tabs_item(ng-repeat='(site, text) in  cur_track.lyrics')
+        textarea {{text}}

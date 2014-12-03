@@ -16,16 +16,16 @@ angular.module('aimprApp')
       best_site
 
 
-    @improveList = (tracks) ->
-      @prepareList(tracks)
+    @improveList = (tracks, callback) ->
+      @prepareList(tracks, callback)
 
 
-    @prepareOne = (track) ->
-      @prepareList([track])
+    @prepareOne = (track, callback) ->
+      @prepareList([track], callback)
 
 
     is_processing = no
-    @prepareList = (tracks) ->
+    @prepareList = (tracks, callback) ->
       queue = Object.keys(tracks)[..5]
       return notify(
         message: 'processing already started'
@@ -49,10 +49,13 @@ angular.module('aimprApp')
           track.state = 'text_not_finded'
           console.info('text_not_finded')
 
+        callback()
+
       fail = (error, track) ->
         track.is_loading = no
         is_processing = no
         console.error(error.message)
+        callback()
 
       check_interval = ->
         console.info('queue.length', queue.length)
