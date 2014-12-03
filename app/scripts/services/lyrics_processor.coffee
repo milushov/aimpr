@@ -16,20 +16,25 @@ angular.module('aimprApp')
 
 
     @improveList = (tracks) ->
+      @prepareList(tracks)
+
+    @prepareOne = (track) ->
+      @prepareList([track])
+
+    @prepareList = (tracks) ->
       #@is_processing = no
 
       #return alert('processing already started') if @is_processing
 
       #@is_processing = yes
-      queue = Object.keys(tracks)[0..2]
+      queue = Object.keys(tracks)
 
       stop_time = $interval ->
         track = tracks[queue.shift()]
 
         track.is_loading = yes
-        q = "#{track.artist} #{track.title}"
 
-        API.getLyricsFromApi(q)
+        API.getLyricsFromApi(track)
           .then (data) ->
             track.is_loading = no
 

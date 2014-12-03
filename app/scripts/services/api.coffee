@@ -115,7 +115,8 @@ angular.module('aimprApp')
             (data) -> processResponse(data, d)
         d.promise
 
-      getLyricsFromApi: (q) ->
+      getLyricsFromApi: (track) ->
+        q = "#{track.artist} #{track.title}"
         d = Q.defer()
         $http.get(getApiUrl(q)).success (data) ->
           processResponse(data, d)
