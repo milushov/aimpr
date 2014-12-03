@@ -10,18 +10,15 @@ angular.module('aimprApp')
     ($scope, $rootScope, $interval, $routeParams, API, LyricsProcessor, Q, $location, ViewHelpers, $sessionStorage, $timeout, initScroll, $window, Stat) ->
 
       #$scope.stat = Stat
-
       console.info('MainCtrl')
       $scope.helpers = ViewHelpers
-
       params = $location.search()
 
-      #api_result  = JSON.parse params.api_result
-      #$scope.stat.audio_count = api_result.response.audio_count
+      api_result  = JSON.parse(params.api_result)
+      audio_count = api_result.response.audio_count
 
       cur_selected_track = null
       cur_user = params.viewer_id
-
       angular.extend $scope,
         per_page:   30
         cur_page:   1
@@ -52,7 +49,7 @@ angular.module('aimprApp')
           $scope.$apply()
 
           # http://goo.gl/xxfBVq
-          $timeout (-> $scope.helpers.resizeIFrame()), 100, false
+          $timeout (-> $scope.helpers.resizeIFrame()), 100
           #$scope.$on('$viewContentLoaded', $scope.helpers.resizeIFrame()))
           #$scope.$on('$includeContentLoaded', $scope.helpers.resizeIFrame()))
 
@@ -65,7 +62,7 @@ angular.module('aimprApp')
 
 
       loadMore = ->
-        return if $scope.is_loading
+        return if $scope.is_loading or isAllTrackRendered()
         console.info('load more')
 
         $scope.is_loading = yes
@@ -86,10 +83,16 @@ angular.module('aimprApp')
         $scope.cur_page is last_page
 
 
+      isAllTrackRendered = ->
+        $scope.rendered_tracks.length >= audio_count
+
+
       initScroll (scroll, height) ->
         loadMore() if ($window.innerHeight - (scroll + height)) < 200
 
+
       $rootScope.getCurTrack = -> $rootScope.cur_track
+
 
       $scope.showTrack = (id) ->
         $rootScope.cur_track = ($scope.tracks.filter (t) -> t.id == id)[0]
