@@ -7,6 +7,7 @@
 ###
 angular.module('aimprApp')
   .service 'LyricsProcessor', ['$interval', '$rootScope', 'API', 'notify', ($interval, $rootScope, API, notify) ->
+    INTERVAL_TIME = 333
 
     determineBestLyrics = (texts) ->
       best_site = Object.keys(texts)[0] # longer is better 👍
@@ -34,6 +35,7 @@ angular.module('aimprApp')
 
       success = (data, track) ->
         track.is_loading = no
+        is_processing = no
 
         if data.count > 0
           track.lyrics = data.items
@@ -49,6 +51,7 @@ angular.module('aimprApp')
 
       fail = (error, track) ->
         track.is_loading = no
+        is_processing = no
         console.error(error.message)
 
       check_interval = ->
@@ -63,12 +66,14 @@ angular.module('aimprApp')
           fail(error, track)
           check_interval()
 
-      stop_time = $interval ->
-        track = tracks[queue.shift()]
-        track.is_loading = yes
+      tick(tracks[queue.shift()])
 
-        tick(track)
+      if queue.length
+        stop_time = $interval ->
+          track = tracks[queue.shift()]
+          track.is_loading = yes
+          tick(track)
 
-      , 333
+        , INTERVAL_TIME
     return
   ]
