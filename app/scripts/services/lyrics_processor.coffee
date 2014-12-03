@@ -6,7 +6,7 @@
  # Service in the aimprApp.
 ###
 angular.module('aimprApp')
-  .service 'LyricsProcessor', ['$interval', '$rootScope', 'API', ($interval, $rootScope, API) ->
+  .service 'LyricsProcessor', ['$interval', '$rootScope', 'API', 'notify', ($interval, $rootScope, API, notify) ->
 
     determineBestLyrics = (texts) ->
       best_site = Object.keys(texts)[0] # longer is better 👍
@@ -18,46 +18,56 @@ angular.module('aimprApp')
     @improveList = (tracks) ->
       @prepareList(tracks)
 
+
     @prepareOne = (track) ->
       @prepareList([track])
 
+
+    is_processing = no
     @prepareList = (tracks) ->
-      #@is_processing = no
+      queue = Object.keys(tracks)[..5]
+      return notify(
+        message: 'processing already started'
+        classes: 'alert-danger'
+      ) if is_processing
+      is_processing = yes
 
-      #return alert('processing already started') if @is_processing
+      success = (data, track) ->
+        track.is_loading = no
 
-      #@is_processing = yes
-      queue = Object.keys(tracks)
+        if data.count > 0
+          track.lyrics = data.items
+          track.best_lyrics_from = determineBestLyrics(data.items)
+          console.info(track.best_lyrics_from)
+
+          track.state = 'text_finded'
+          track.need_to_save = yes # just for dev
+
+        else
+          track.state = 'text_not_finded'
+          console.info('text_not_finded')
+
+      fail = (error, track) ->
+        track.is_loading = no
+        console.error(error.message)
+
+      check_interval = ->
+        console.info('queue.length', queue.length)
+        $interval.cancel(stop_time) if queue.length is 0
+
+      tick = (track) ->
+        API.getLyricsFromApi(track).then (data) ->
+          success(data, track)
+          check_interval()
+        , (error) ->
+          fail(error, track)
+          check_interval()
 
       stop_time = $interval ->
         track = tracks[queue.shift()]
-
         track.is_loading = yes
 
-        API.getLyricsFromApi(track)
-          .then (data) ->
-            track.is_loading = no
-
-            if data.count > 0
-              track.lyrics = data.items
-              track.best_lyrics_from = determineBestLyrics(data.items)
-              console.info(track.best_lyrics_from)
-
-              track.state = 'text_finded'
-              track.need_to_save = yes # just for dev
-              track.lyrics_vk = texts.items
-              #track.lyrics_text =
-
-            else
-              track.state = 'text_not_finded'
-              console.info('text_not_finded')
-
-            $interval.cancel(stop_time) if queue.length is 0
-
-          , (error) ->
-            track.is_loading = no
-            $interval.cancel(stop_time) if queue.length is 0
-            console.info(error)
+        tick(track)
 
       , 333
     return

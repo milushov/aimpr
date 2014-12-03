@@ -22,12 +22,22 @@ angular.module('aimprApp')
       if (resp = data.response)?
         deferred.resolve(resp)
       else
-        error_msg = data.error?.error_msg || data.error
+        error_msg = data.error.error_msg || data.error
+        # show error through notify only from VK
         notify(
           message: error_msg
           classes: 'alert-danger'
-        )
+        ) if typeof data.error is 'object'
         deferred.reject(new Error(error_msg))
+
+
+    processServerError = (data, status, deferred) ->
+      error_msg = 'server is died :( please try again later'
+      notify(
+        message: error_msg
+        classes: 'alert-danger'
+      )
+      deferred.reject(new Error(error_msg))
 
 
     return {
@@ -120,8 +130,8 @@ angular.module('aimprApp')
         d = Q.defer()
         $http.get(getApiUrl(q)).success (data) ->
           processResponse(data, d)
-        .error (data) ->
-          console.info(data)
+        .error (data, status, headers, config) ->
+          processServerError(data, status, d)
         d.promise
     }
   ]
