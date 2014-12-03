@@ -75,7 +75,7 @@ angular.module('aimprApp')
 
     $scope.getFriendsByName = (name) ->
       if name.length > 1
-        if $scope.friends.length <= friends_count
+        if $scope.friends.length < friends_count
           $scope.friends = $scope.friends[0..$scope.per_part]
           request_count = Math.ceil(friends_count/$scope.per_part) - 1
           cur_part = 1
