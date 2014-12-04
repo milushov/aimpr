@@ -1,16 +1,21 @@
 .row
   .col-xs-1
-    span.glyphicon(ng-class='{"glyphicon-ok": track.lyrics_id, "glyphicon-remove": !track.lyrics_id }')
+    span.glyphicon(ng-class='{"glyphicon-align-justify": track.lyrics_id }')
 
   .col-xs-1
     .loading-bar-spinner(ng-if='track.is_loading')
       .spinner-icon
 
   .col-xs-1
-    |{{track.id | limitTo:4}}
+    span.glyphicon.glyphicon-play
 
-  .col-xs-9
+  .col-xs-8
     a.track-name(ng-click='showTrack(track.id)') {{track.artist + ' - ' + track.title | characters: 42 :false }}
+
+  .col-xs-1
+    .frame
+      .toggle.square(ng-click='addOrRemove(track)')
+
 
 .row(ng-if='isTrackSelected(track.id)')
   .col-xs-1

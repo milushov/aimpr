@@ -95,7 +95,6 @@ angular.module('aimprApp')
             (data) -> processResponse(data, d)
         d.promise
 
-
       getLyrics: (lid) ->
         d = Q.defer()
         VK.then (vk) ->
@@ -111,6 +110,33 @@ angular.module('aimprApp')
             owner_id: oid
             audio_id: aid
             text:     text
+            (data) -> processResponse(data, d)
+        d.promise
+
+      addTrack: (track)->
+        d = Q.defer()
+        VK.then (vk) ->
+          vk.api 'audio.add',
+            audio_id: track.id
+            owner_id: track.owner_id
+            (data) -> processResponse(data, d)
+        d.promise
+
+      deleteTrack: (track)->
+        d = Q.defer()
+        VK.then (vk) ->
+          vk.api 'audio.delete',
+            audio_id: track.id
+            owner_id: track.owner_id
+            (data) -> processResponse(data, d)
+        d.promise
+
+      restoreTrack: (track)->
+        d = Q.defer()
+        VK.then (vk) ->
+          vk.api 'audio.restore',
+            audio_id: track.id
+            owner_id: track.owner_id
             (data) -> processResponse(data, d)
         d.promise
 

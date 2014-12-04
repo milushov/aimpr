@@ -89,6 +89,10 @@ angular.module('aimprApp')
         loadMore() if ($window.innerHeight - (scroll + height)) < 200
 
 
+      $scope.addOrRemove = (track) ->
+        #TrackService.
+
+
       $scope.showTrack = (id) ->
         TrackService.cur_track = ($scope.tracks.filter (t) -> t.id is id)[0]
 

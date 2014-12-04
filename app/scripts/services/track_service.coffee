@@ -26,5 +26,17 @@ angular.module('aimprApp')
       if index = $ls.tracks[track.id]
         $ls.sites[index-1] # back shift
 
+    @add = (track) ->
+      API.addTrack(track).then (data) ->
+        console.info(track, 'added')
+
+    @delete = (track) ->
+      API.deleteTrack(track).then (data) ->
+        console.info(track, 'deleted')
+
+    @restore = (track) ->
+      API.restoreTrack(track).then (data) ->
+        console.info(track, 'restored')
+
     return
   ]
