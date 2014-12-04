@@ -16,6 +16,7 @@
   .col-xs-1
 
   .col-xs-10
-    ng-include(src='"views/shared/_get_text.html"')
+    div(ng-controller='BestLyricsCtrl')
+      lyrics-tabs(texts='cur_track.lyrics')
 
   .col-xs-1
