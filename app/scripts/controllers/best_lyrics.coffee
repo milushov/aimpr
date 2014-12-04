@@ -19,7 +19,7 @@ angular.module('aimprApp')
       $scope.cur_track.is_loading = yes
 
       LyricsProcessor.prepareOne $scope.cur_track, ->
-        $scope.$emit 'reInitLyricsTabs'
+        $scope.$emit 'setSelectedSite'
         $scope.$apply()
         #$timeout (-> $scope.helpers.resizeIFrame()), 100
 

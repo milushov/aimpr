@@ -1,6 +1,6 @@
 .tab
   ul.tabs
-    li(ng-repeat='(site, _) in texts' ng-class='{"current": site == selected_site}')
+    li(ng-repeat='(site, _) in texts track by $index' ng-class='{"current": site == selected_site}')
       a(ng-click = 'select(site)') {{site}}
     | &#x9;&#x9;
 
@@ -8,5 +8,5 @@
       a.btn.btn-primary(ng-show='texts' ng-click='save(selected_site)') Сохранить
 
   .tab_content
-    .tabs_item(ng-repeat='(site, text) in texts')
+    .tabs_item(ng-repeat='(site, text) in texts track by $index')
       pre {{text}}

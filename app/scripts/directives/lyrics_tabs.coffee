@@ -23,7 +23,6 @@ angular.module('aimprApp')
         g.preventDefault()
 
     controller: ($scope, $rootScope, TrackService) ->
-      # todo read value from localStorage
       setSelectedSite = ->
         # is's kind of shitty, i know
         track = TrackService.cur_track
@@ -31,7 +30,7 @@ angular.module('aimprApp')
 
       setSelectedSite()
 
-      $rootScope.$on 'reInitLyricsTabs', setSelectedSite
+      $rootScope.$on 'setSelectedSite', setSelectedSite
 
       $scope.save = (site) ->
         console.info('save', $scope.selected_site)

@@ -16,6 +16,13 @@ angular.module('aimprApp')
       best_site
 
 
+    determineBestLyricsFromVK = (texts) ->
+      best_text = texts[0]
+      for text in texts
+        best_text = text if text.length > best_text.length
+      best_text
+
+
     @improveList = (tracks, callback) ->
       @prepareList(tracks, callback)
 
@@ -33,14 +40,25 @@ angular.module('aimprApp')
       ) if is_processing
       is_processing = yes
 
-      success = (data, track) ->
-        track.is_loading = no
-        is_processing = no
+      success = (data, track, req_number) ->
+        if req_number is 0
+          track.is_loading = no
+          is_processing = no
 
         if data.count > 0
-          track.lyrics = data.items
-          site = TrackService.getChoiceFromLocalStorage(track) || determineBestLyrics(data.items)
-          track.best_lyrics_from = site
+          track.lyrics = track.lyrics || {}
+
+          new_items = if data.vk
+            vk: determineBestLyricsFromVK(data.items)
+          else
+            data.items
+
+          angular.extend(track.lyrics, new_items)
+
+          from_storage = TrackService.getChoiceFromLocalStorage(track)
+          determined = determineBestLyrics(data.items)
+          track.best_lyrics_from = from_storage || determined
+
           console.info(track.best_lyrics_from)
 
           track.state = 'text_finded'
@@ -52,9 +70,10 @@ angular.module('aimprApp')
 
         callback()
 
-      fail = (error, track) ->
-        track.is_loading = no
-        is_processing = no
+      fail = (error, track, req_number) ->
+        if req_number is 0
+          track.is_loading = no
+          is_processing = no
         console.error(error.message)
         callback()
 
@@ -63,12 +82,29 @@ angular.module('aimprApp')
         $interval.cancel(stop_time) if queue.length is 0
 
       tick = (track) ->
+        # how much requsts i expect
+        # i.e. first request would have number 1
+        # nad last with nuber 0
+        req_number = 2
+
         API.getLyricsFromApi(track).then (data) ->
-          success(data, track)
+          success(data, track, (req_number -= 1))
           check_interval()
         , (error) ->
-          fail(error, track)
+          fail(error, track, (req_number -= 1))
           check_interval()
+
+        # i'm not merge second call to api to first,
+        # cause this aproach make interface response more long
+        # and as call to VK api performed much faster,
+        # we get nice interface response speed
+        API.searchTracksWithLyrics(track).then (data) ->
+          success(data, track, (req_number -= 1))
+          check_interval()
+        , (error) ->
+          fail(error, track, (req_number -= 1))
+          check_interval()
+
 
       tick(tracks[queue.shift()])
 

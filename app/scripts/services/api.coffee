@@ -67,8 +67,9 @@ angular.module('aimprApp')
             (data) -> processResponse(data, d)
         d.promise
 
-      searchTracksWithLyrics: (q) ->
+      searchTracksWithLyrics: (track) ->
         d = Q.defer()
+        q = "#{track.artist} #{track.title}"
         VK.then (vk) ->
           vk.api 'execute',
             code: """
@@ -89,7 +90,7 @@ angular.module('aimprApp')
                 i = i + 1;
               }
 
-              return {count: texts.length, items: texts};
+              return {count: texts.length, items: texts, vk: true};
             """
             (data) -> processResponse(data, d)
         d.promise
