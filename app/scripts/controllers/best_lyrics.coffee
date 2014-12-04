@@ -6,12 +6,11 @@
  # Controller of the aimprApp
 ###
 angular.module('aimprApp')
-  .controller 'BestLyricsCtrl', ['$scope', 'LyricsProcessor', 'ViewHelpers', ($scope, LyricsProcessor, ViewHelpers) ->
+  .controller 'BestLyricsCtrl', ['$scope', 'LyricsProcessor', 'ViewHelpers', 'TrackService', ($scope, LyricsProcessor, ViewHelpers, TrackService) ->
     $scope.helpers = ViewHelpers
     console.info('BestLyricsCtrl')
 
-    $scope.cur_track = $scope.getCurTrack()
-
+    $scope.cur_track = TrackService.cur_track
 
     #$scope.$on '$viewContentLoaded', $scope.helpers.resizeIFrame()
     #$scope.$on '$includeContentLoaded', $scope.helpers.resizeIFrame()

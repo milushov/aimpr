@@ -26,7 +26,7 @@ angular.module('aimprApp')
       # todo read value from localStorage
       setSelectedSite = ->
         # is's kind of shitty, i know
-        track = $rootScope.getCurTrack()
+        track = TrackService.cur_track
         $scope.selected_site = track.best_lyrics_from
 
       setSelectedSite()
@@ -35,7 +35,7 @@ angular.module('aimprApp')
 
       $scope.save = (site) ->
         console.info('save', $scope.selected_site)
-        track = $rootScope.getCurTrack()
+        track = TrackService.cur_track
         track.best_lyrics_from = site
         TrackService.save(track)
 

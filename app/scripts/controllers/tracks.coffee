@@ -6,8 +6,8 @@
 
 angular.module('aimprApp')
   .controller 'TracksCtrl', [
-    '$scope', '$rootScope', '$interval', '$routeParams', 'Info', 'API', 'LyricsProcessor', 'Q', 'ViewHelpers', '$sessionStorage', '$timeout', 'initScroll', '$window', 'Stat'
-    ($scope, $rootScope, $interval, $routeParams, Info, API, LyricsProcessor, Q, ViewHelpers, $sessionStorage, $timeout, initScroll, $window, Stat) ->
+    '$scope', '$rootScope', '$interval', '$routeParams', 'Info', 'TrackService', 'API', 'LyricsProcessor', 'Q', 'ViewHelpers', '$timeout', 'initScroll', '$window', 'Stat'
+    ($scope, $rootScope, $interval, $routeParams, Info, TrackService, API, LyricsProcessor, Q, ViewHelpers, $timeout, initScroll, $window, Stat) ->
 
       #$scope.stat = Stat
       console.info('MainCtrl')
@@ -89,12 +89,8 @@ angular.module('aimprApp')
         loadMore() if ($window.innerHeight - (scroll + height)) < 200
 
 
-      $rootScope.getCurTrack = -> $rootScope.cur_track
-
-
       $scope.showTrack = (id) ->
-        $rootScope.cur_track = ($scope.tracks.filter (t) -> t.id == id)[0]
-        #console.info('show track', track)
+        TrackService.cur_track = ($scope.tracks.filter (t) -> t.id is id)[0]
 
         if cur_selected_track is id
           return cur_selected_track = null

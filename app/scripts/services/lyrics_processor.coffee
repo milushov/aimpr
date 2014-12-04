@@ -6,7 +6,7 @@
  # Service in the aimprApp.
 ###
 angular.module('aimprApp')
-  .service 'LyricsProcessor', ['$interval', '$rootScope', 'API', 'notify', ($interval, $rootScope, API, notify) ->
+  .service 'LyricsProcessor', ['$interval', '$rootScope', 'API', 'TrackService', 'notify', ($interval, $rootScope, API, TrackService, notify) ->
     INTERVAL_TIME = 333
 
     determineBestLyrics = (texts) ->
@@ -39,7 +39,8 @@ angular.module('aimprApp')
 
         if data.count > 0
           track.lyrics = data.items
-          track.best_lyrics_from = determineBestLyrics(data.items)
+          site = TrackService.getChoiceFromLocalStorage(track) || determineBestLyrics(data.items)
+          track.best_lyrics_from = site
           console.info(track.best_lyrics_from)
 
           track.state = 'text_finded'
