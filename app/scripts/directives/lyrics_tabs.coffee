@@ -5,7 +5,7 @@
  # # lyricsTabs
 ###
 angular.module('aimprApp')
-  .directive 'lyricsTabs', ['$rootScope', (rootScope) ->
+  .directive 'lyricsTabs', ['$rootScope', 'TrackService', (rootScope, TrackService) ->
     templateUrl: '/views/shared/_tabs.html'
     restrict: 'E'
     scope: {
@@ -22,7 +22,7 @@ angular.module('aimprApp')
         tab.find(".tab_content").find("div.tabs_item:eq(" + index + ")").slideDown()
         g.preventDefault()
 
-    controller: ($scope, $rootScope) ->
+    controller: ($scope, $rootScope, TrackService) ->
       # todo read value from localStorage
       setSelectedSite = ->
         # is's kind of shitty, i know
@@ -35,7 +35,9 @@ angular.module('aimprApp')
 
       $scope.save = (site) ->
         console.info('save', $scope.selected_site)
-        $rootScope.getCurTrack().best_lyrics_from = site
+        track = $rootScope.getCurTrack()
+        track.best_lyrics_from = site
+        TrackService.save(track)
 
 
       $scope.select = (site) ->

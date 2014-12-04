@@ -6,19 +6,17 @@
 
 angular.module('aimprApp')
   .controller 'TracksCtrl', [
-    '$scope', '$rootScope', '$interval', '$routeParams', 'API', 'LyricsProcessor', 'Q', '$location', 'ViewHelpers', '$sessionStorage', '$timeout', 'initScroll', '$window', 'Stat'
-    ($scope, $rootScope, $interval, $routeParams, API, LyricsProcessor, Q, $location, ViewHelpers, $sessionStorage, $timeout, initScroll, $window, Stat) ->
+    '$scope', '$rootScope', '$interval', '$routeParams', 'Info', 'API', 'LyricsProcessor', 'Q', 'ViewHelpers', '$sessionStorage', '$timeout', 'initScroll', '$window', 'Stat'
+    ($scope, $rootScope, $interval, $routeParams, Info, API, LyricsProcessor, Q, ViewHelpers, $sessionStorage, $timeout, initScroll, $window, Stat) ->
 
       #$scope.stat = Stat
       console.info('MainCtrl')
       $scope.helpers = ViewHelpers
-      params = $location.search()
 
-      api_result  = JSON.parse(params.api_result)
-      audio_count = api_result.response.audio_count
+      audio_count = Info.audio_count
 
       cur_selected_track = null
-      cur_user = params.viewer_id
+      cur_user = Info.viewer_id
       angular.extend $scope,
         per_page:   30
         cur_page:   1
