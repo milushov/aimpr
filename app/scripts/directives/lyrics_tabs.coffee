@@ -23,11 +23,20 @@ angular.module('aimprApp')
         g.preventDefault()
 
     controller: ($scope, $rootScope) ->
-      $rootScope.$on 'initLyricsTabs', ->
-        $scope.selected_site = Object.keys($scope.texts)[0] if $scope.texts
+      # todo read value from localStorage
+      setSelectedSite = ->
+        # is's kind of shitty, i know
+        track = $rootScope.getCurTrack()
+        $scope.selected_site = track.best_lyrics_from
 
-      $scope.save = (a) ->
+      setSelectedSite()
+
+      $rootScope.$on 'reInitLyricsTabs', setSelectedSite
+
+      $scope.save = (site) ->
         console.info('save', $scope.selected_site)
+        $rootScope.getCurTrack().best_lyrics_from = site
+
 
       $scope.select = (site) ->
         $scope.selected_site = site

@@ -6,7 +6,7 @@
  # Controller of the aimprApp
 ###
 angular.module('aimprApp')
-  .controller 'BestLyricsCtrl', ['$scope', '$timeout', 'LyricsProcessor', 'ViewHelpers', ($scope, $timeout, LyricsProcessor, ViewHelpers) ->
+  .controller 'BestLyricsCtrl', ['$scope', 'LyricsProcessor', 'ViewHelpers', ($scope, LyricsProcessor, ViewHelpers) ->
     $scope.helpers = ViewHelpers
     console.info('BestLyricsCtrl')
 
@@ -16,17 +16,13 @@ angular.module('aimprApp')
     #$scope.$on '$viewContentLoaded', $scope.helpers.resizeIFrame()
     #$scope.$on '$includeContentLoaded', $scope.helpers.resizeIFrame()
 
-    if $scope.cur_track.lyrics?
-      $scope.$apply()
-      $timeout (-> $scope.$emit 'initLyricsTabs' ), 100
-    else
+    unless $scope.cur_track.lyrics?
       $scope.cur_track.is_loading = yes
 
       LyricsProcessor.prepareOne $scope.cur_track, ->
-        $scope.$emit 'initLyricsTabs'
+        $scope.$emit 'reInitLyricsTabs'
         $scope.$apply()
         #$timeout (-> $scope.helpers.resizeIFrame()), 100
-
 
   ]
 

@@ -1,5 +1,4 @@
 .tab
-  {{selected_site}}
   ul.tabs
     li(ng-repeat='(site, _) in texts' ng-class='{"current": site == selected_site}')
       a(ng-click = 'select(site)') {{site}}
