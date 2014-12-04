@@ -12,8 +12,8 @@ angular.module('aimprApp')
   .factory 'API', ['$http', 'VK', 'notify', ($http, VK, notify) ->
 
     getApiUrl = (q) ->
-      domain = unless /localhost/.test(location.hostname)
-        'http://localhost:5000'
+      domain = if /localhost/.test(location.hostname)
+        'https://localhost:5001'
       else 'https://aimpr.milushov.ru'
       "#{domain}/search/#{q}"
 
