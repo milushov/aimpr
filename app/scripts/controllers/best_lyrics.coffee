@@ -16,13 +16,13 @@ angular.module('aimprApp')
     #$scope.$on '$viewContentLoaded', $scope.helpers.resizeIFrame()
     #$scope.$on '$includeContentLoaded', $scope.helpers.resizeIFrame()
 
-    unless $scope.cur_track.texts?
+    unless $scope.cur_track.lyrics?
       $scope.cur_track.is_loading = yes
 
       LyricsProcessor.prepareOne $scope.cur_track, ->
+        $scope.$emit 'reInitLyricsTabs'
         $scope.$apply()
-        $timeout (-> $scope.helpers.resizeIFrame()), 100
-
+        #$timeout (-> $scope.helpers.resizeIFrame()), 100
 
   ]
 
