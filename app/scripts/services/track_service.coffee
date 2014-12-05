@@ -28,15 +28,17 @@ angular.module('aimprApp')
 
     @add = (track) ->
       API.addTrack(track).then (data) ->
-        console.info(track, 'added')
+        console.info('added')
 
     @delete = (track) ->
       API.deleteTrack(track).then (data) ->
-        console.info(track, 'deleted')
+        console.info('deleted')
+        track.deleted = yes
 
     @restore = (track) ->
       API.restoreTrack(track).then (data) ->
-        console.info(track, 'restored')
+        console.info('restored')
+        track.deleted = no
 
     return
   ]

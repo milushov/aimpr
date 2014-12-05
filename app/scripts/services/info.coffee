@@ -7,10 +7,8 @@
 ###
 angular.module('aimprApp')
   .service 'Info', ['$location', ($location) ->
-
-    params = $location.search()
-
-    api_result  = JSON.parse(params.api_result)
-    @audio_count = api_result.response.audio_count
-    @viewer_id = params.viewer_id
+    params       = $location.search()
+    @viewer_id   = parseInt(params.viewer_id)
+    @user_id     = parseInt(if params.user_id is '0' then params.viewer_id else params.user_id)
+    @audio_count = JSON.parse(params.api_result).response.audio_count
   ]

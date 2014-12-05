@@ -11,18 +11,18 @@ angular.module('aimprApp')
 
       #$scope.stat = Stat
       console.info('MainCtrl')
-      $scope.helpers = ViewHelpers
-
       audio_count = Info.audio_count
-
       cur_selected_track = null
-      cur_user = Info.viewer_id
+      $scope.viewer_id = Info.viewer_id
+      user_id = Info.user_id
+
+
       angular.extend $scope,
         per_page:   30
         cur_page:   1
         per_part:   100
         cur_part:   1
-        is_loading: true
+        is_loading: yes
 
 
       renderPage = ->
@@ -38,7 +38,7 @@ angular.module('aimprApp')
           offset: $scope.per_part * ($scope.cur_part - 1)
         }
 
-        API.getTracks(cur_user, prms).then (tracks) ->
+        API.getTracks(user_id, prms).then (tracks) ->
           $scope.tracks = ($scope.tracks || []).concat(tracks.items)
 
           renderPage()
@@ -47,9 +47,9 @@ angular.module('aimprApp')
           $scope.$apply()
 
           # http://goo.gl/xxfBVq
-          $timeout (-> $scope.helpers.resizeIFrame()), 100
-          #$scope.$on('$viewContentLoaded', $scope.helpers.resizeIFrame()))
-          #$scope.$on('$includeContentLoaded', $scope.helpers.resizeIFrame()))
+          $timeout (-> ViewHelpers.resizeIFrame()), 100
+          #$scope.$on('$viewContentLoaded', ViewHelpers.resizeIFrame()))
+          #$scope.$on('$includeContentLoaded', ViewHelpers.resizeIFrame()))
 
 
       getTracks()
@@ -70,7 +70,7 @@ angular.module('aimprApp')
         $scope.$apply()
 
         $timeout (-> $scope.is_loading = false), 1000, false
-        $timeout (-> $scope.helpers.resizeIFrame()), 100, false
+        $timeout (-> ViewHelpers.resizeIFrame()), 100, false
 
         getTracks() if isAlmostLastPart()
 
@@ -88,9 +88,37 @@ angular.module('aimprApp')
       initScroll (scroll, height) ->
         loadMore() if ($window.innerHeight - (scroll + height)) < 200
 
+      $scope.addOrRemove = (track, opts = {}) ->
+        if opts.my_list?
+          if track.deleted?
+            if track.deleted is yes
+              #TrackService.restore(track)
+              track.deleted = null
+              console.info('restored')
+            else
+              #TrackService.add(track)
+              console.info('added')
+          else
+            #TrackService.delete(track)
+            track.deleted = yes
+            console.info('deleted')
+        else
+          if track.deleted?
+            if track.deleted is yes
+              track.deleted = no
+              console.info('restored')
+            else
+              track.deleted = yes
+              console.info('deleted')
+          else
+            console.info('added')
+            track.deleted = no
 
-      $scope.addOrRemove = (track) ->
-        #TrackService.
+
+
+
+
+
 
 
       $scope.showTrack = (id) ->
@@ -101,7 +129,7 @@ angular.module('aimprApp')
         else
           cur_selected_track = id
 
-        $timeout (-> $scope.helpers.resizeIFrame()), 100, false
+        $timeout (-> ViewHelpers.resizeIFrame()), 100, false
 
 
       $scope.isTrackSelected = (aid) ->
@@ -109,7 +137,7 @@ angular.module('aimprApp')
 
 
       $rootScope.$on 'showUserTracks', (e, id) ->
-        cur_user = id
+        user_id = id
         $scope.tracks = $scope.rendered_tracks = []
         $scope.cur_part = $scope.cur_page = 1
         getTracks()
