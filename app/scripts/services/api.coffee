@@ -74,7 +74,7 @@ angular.module('aimprApp')
           vk.api 'execute',
             code: """
               var lids = API.audio.search({
-                "q":"{q}",
+                "q":"#{q}",
                 "auto_complete": 1,
                 "lyrics": 1,
                 "sort": 2,
