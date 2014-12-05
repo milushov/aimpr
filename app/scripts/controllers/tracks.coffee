@@ -88,37 +88,33 @@ angular.module('aimprApp')
       initScroll (scroll, height) ->
         loadMore() if ($window.innerHeight - (scroll + height)) < 200
 
+
       $scope.addOrRemove = (track, opts = {}) ->
+        # some crazy logic here
         if opts.my_list?
           if track.deleted?
             if track.deleted is yes
-              #TrackService.restore(track)
-              track.deleted = null
-              console.info('restored')
+              TrackService.restore track, ->
+                $scope.$apply -> track.deleted = null
             else
-              #TrackService.add(track)
-              console.info('added')
+              TrackService.add(track)
           else
-            #TrackService.delete(track)
-            track.deleted = yes
-            console.info('deleted')
+            TrackService.delete track, ->
+              $scope.$apply -> track.deleted = yes
+
         else
           if track.deleted?
             if track.deleted is yes
-              track.deleted = no
-              console.info('restored')
+              TrackService.restore track, ->
+                $scope.$apply -> track.deleted = no
             else
-              track.deleted = yes
-              console.info('deleted')
+              TrackService.delete track, ->
+                $scope.$apply -> track.deleted = yes
           else
-            console.info('added')
-            track.deleted = no
-
-
-
-
-
-
+            TrackService.add track, (id) ->
+              track.new_id = id
+              track.new_owner_id = $scope.viewer_id.toString()
+              $scope.$apply -> track.deleted = no
 
 
       $scope.showTrack = (id) ->

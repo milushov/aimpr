@@ -126,8 +126,8 @@ angular.module('aimprApp')
         d = Q.defer()
         VK.then (vk) ->
           vk.api 'audio.delete',
-            audio_id: track.id
-            owner_id: track.owner_id
+            audio_id: track.new_id || track.id
+            owner_id: track.new_owner_id || track.owner_id
             (data) -> processResponse(data, d)
         d.promise
 
@@ -135,8 +135,8 @@ angular.module('aimprApp')
         d = Q.defer()
         VK.then (vk) ->
           vk.api 'audio.restore',
-            audio_id: track.id
-            owner_id: track.owner_id
+            audio_id: track.new_id || track.id
+            owner_id: track.new_owner_id || track.owner_id
             (data) -> processResponse(data, d)
         d.promise
 

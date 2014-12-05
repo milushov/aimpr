@@ -1,4 +1,4 @@
-.row
+.row(ng-class='{"track-deleted": track.deleted == true}')
   .col-xs-1
     span.glyphicon(ng-class='{"glyphicon-align-justify": track.lyrics_id }')
 
@@ -9,22 +9,12 @@
   .col-xs-1
     span.glyphicon.glyphicon-play
 
-  .col-xs-3
+  .col-xs-8
     a.track-name(ng-click='showTrack(track.id)')
       | {{track.artist + ' - ' + track.title | characters: 42 :false }}
 
-  .col-xs-5
-    | track.deleted == undefined
-    b
-      | {{track.deleted == undefined}}
-    br
-    | track.deleted == false
-    b
-      | {{track.deleted == false}}
-
   .col-xs-1
     .frame(ng-if='track.owner_id == viewer_id')
-      //-.toggle.square(ng-class='{"active": (track.deleted == "undefined" || track.deleted == false)}' ng-click='addOrRemove(track)')
       .toggle.square(ng-class='{active: !track.deleted }' ng-click='addOrRemove(track, {my_list: true})')
 
     .frame(ng-if='track.owner_id != viewer_id')
