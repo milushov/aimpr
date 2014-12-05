@@ -1,18 +1,11 @@
-//-| cur
-//-| {{cur_page}}
-//-br
-//-| per
-//-| {{per_page}}
-//-br
-//-| friends.length
-//-| {{friends.length}}
-//-br
 .friends-list
-  .row(ng-if='friends.length > per_page')
+  .row(ng-if='friends.length > getPerPage()')
     .friends-search-box
       //-input.form-control(placeholder='поиск..' ng-model='search_name')
-      .col-xs-12
+      .col-xs-12.search-wrapper
         input.form-control(placeholder='поиск..' ng-model='search_name' ng-change='getFriendsByName(search_name)')
+        .loading-bar-spinner(ng-if='is_loading')
+          .spinner-icon
 
   .row.friend-item(ng-repeat='friend in rendered_friends track by $index' ng-click='showUserTracks(friend.id)')
     img.img-circle.friend-photo(src='{{friend.photo_50}}')
@@ -21,9 +14,7 @@
   //  how to bind this fuckin model
   //-| {{search_name.length}}
   //-.row(ng-if='(search_name.length == 0) && (friends.length > per_page) ')
-  .row(ng-if='friends.length > per_page')
-    //-.col-xs-1
-      //-.loading-bar-spinner(ng-if='is_loading')
-        //-.spinner-icon
+  | {{search_name.length}}
+  .row(ng-if='(friends.length > getPerPage())')
     .col-xs-12
       a.btn.btn-default.show-more(ng-click='showPart("next")') Еще
