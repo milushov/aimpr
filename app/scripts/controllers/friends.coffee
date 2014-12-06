@@ -14,6 +14,7 @@ angular.module('aimprApp')
     per_part = 15
     cur_part = 1
     $scope.getPerPage = -> cur_page
+    $scope.search = name: ''
     $scope.is_loading = no # for getFriendsByName
     is_all_friends_loaded = no
 
@@ -62,8 +63,9 @@ angular.module('aimprApp')
 
     searchFriendsByName = (name) ->
       regexp = new RegExp(name, 'gim')
-      $scope.friends.filter (friend) ->
+      filter = (friend) ->
         regexp.test(friend.first_name) || regexp.test(friend.last_name)
+      $scope.friends.filter(filter)[..9]
 
 
     search_name = ''
@@ -71,8 +73,10 @@ angular.module('aimprApp')
       search_name = name
       return console.info('loading friends for searching..') if $scope.is_loading
 
-      if name.length > 1
+      if name.length > 0
         if $scope.friends.length < friends_count
+          $scope.rendered_friends = searchFriendsByName(name)
+
           $scope.is_loading = yes
           $scope.friends = $scope.friends[0..per_part-1]
           request_count = Math.ceil(friends_count/per_part) - 1
