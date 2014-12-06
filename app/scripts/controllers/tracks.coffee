@@ -89,6 +89,31 @@ angular.module('aimprApp')
         loadMore() if ($window.innerHeight - (scroll + height)) < 200
 
 
+      $scope.playOrStop = (track) ->
+        $scope.tracks.map (t) -> t.is_playing = no; t
+
+        if TrackService.cur_playing
+          if TrackService.cur_playing.id is track.id
+            if track.is_playing
+              track.is_playing = no
+              $scope.$emit('stop', track)
+            else
+              track.is_playing = yes
+              $scope.$emit('play', track)
+          else
+            TrackService.cur_playing = angular.copy(track)
+            track.is_playing = yes
+            $scope.$emit('play', track)
+        else
+          TrackService.cur_playing = angular.copy(track)
+          track.is_playing = yes
+          $scope.$emit('play', track)
+
+
+
+
+
+
       $scope.addOrRemove = (track, opts = {}) ->
         # some crazy logic here
         if opts.my_list?

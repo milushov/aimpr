@@ -7,7 +7,7 @@
       .spinner-icon
 
   .col-xs-1
-    span.glyphicon.glyphicon-play
+    span.glyphicon(ng-click='playOrStop(track)' ng-class='{"glyphicon-play": !track.is_playing, "glyphicon-stop": track.is_playing}')
 
   .col-xs-7
     a.track-name(ng-click='showTrack(track.id)')
