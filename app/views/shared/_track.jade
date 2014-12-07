@@ -11,7 +11,7 @@
 
   .col-xs-7
     a.track-name(ng-click='showTrack(track.id)')
-      | {{track.artist + ' - ' + track.title | characters: 42 :false }}
+      | {{track | trackName}}
 
   .col-xs-2.duration-or-btn
     span.track-duration {{track.duration | duration}}

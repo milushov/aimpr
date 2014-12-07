@@ -1,0 +1,5 @@
+.row.player-wrapper
+  .col-xs-1
+    span.glyphicon(ng-class='{"glyphicon-play": !is_playing, "glyphicon-pause": is_playing}')
+  .col-xs-11
+    .row {{cur_playing | trackName:60}}

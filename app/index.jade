@@ -29,13 +29,8 @@ head
         .col-xs-3
           button.btn.btn-primary(ng-click='improveList()') Improve!
 
-      .row(ng-controller='PlayerCtrl')
-        .row.player-wrapper
-          .col-xs-1
-            span.glyphicon(ng-class='{"glyphicon-play": !is_playing, "glyphicon-pause": is_playing}')
-          .col-xs-11
+      .row(ng-controller='PlayerCtrl' ng-include='"views/player.html"')
 
       .row
         .col-xs-9(ng-view)
-        .col-xs-3(ng-controller='FriendsCtrl')
-          ng-include(src='"views/friends.html"')
+        .col-xs-3(ng-controller='FriendsCtrl' ng-include='"views/friends.html"')

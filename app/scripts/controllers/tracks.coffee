@@ -10,7 +10,7 @@ angular.module('aimprApp')
     ($scope, $rootScope, $interval, $routeParams, Info, TrackService, API, LyricsProcessor, Q, ViewHelpers, $timeout, initScroll, $window, Stat) ->
 
       #$scope.stat = Stat
-      console.info('MainCtrl')
+      console.info('TracksCtrl')
       audio_count = Info.audio_count
       cur_selected_track = null
       $scope.viewer_id = Info.viewer_id
@@ -32,7 +32,7 @@ angular.module('aimprApp')
         $scope.rendered_tracks = ($scope.rendered_tracks || []).concat(new_tracks)
 
 
-      getTracks = () ->
+      getTracks = (callback) ->
         prms = {
           count:  $scope.per_part
           offset: $scope.per_part * ($scope.cur_part - 1)
@@ -50,9 +50,12 @@ angular.module('aimprApp')
           $timeout (-> ViewHelpers.resizeIFrame()), 100
           #$scope.$on('$viewContentLoaded', ViewHelpers.resizeIFrame()))
           #$scope.$on('$includeContentLoaded', ViewHelpers.resizeIFrame()))
+          callback() if callback
 
 
-      getTracks()
+      getTracks ->
+        if $scope.tracks?.length
+          $scope.$emit 'setFirstTrack', $scope.tracks[0]
 
 
       $rootScope.$on 'improveList', ->
