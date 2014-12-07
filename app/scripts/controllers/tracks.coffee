@@ -10,7 +10,7 @@ angular.module('aimprApp')
     ($scope, $rootScope, $interval, $routeParams, Info, TrackService, API, LyricsProcessor, Q, ViewHelpers, $timeout, initScroll, $window, Stat) ->
 
       #$scope.stat = Stat
-      console.info('MainCtrl')
+      console.info('TracksCtrl')
       audio_count = Info.audio_count
       cur_selected_track = null
       $scope.viewer_id = Info.viewer_id
@@ -32,7 +32,7 @@ angular.module('aimprApp')
         $scope.rendered_tracks = ($scope.rendered_tracks || []).concat(new_tracks)
 
 
-      getTracks = () ->
+      getTracks = (callback) ->
         prms = {
           count:  $scope.per_part
           offset: $scope.per_part * ($scope.cur_part - 1)
@@ -50,9 +50,12 @@ angular.module('aimprApp')
           $timeout (-> ViewHelpers.resizeIFrame()), 100
           #$scope.$on('$viewContentLoaded', ViewHelpers.resizeIFrame()))
           #$scope.$on('$includeContentLoaded', ViewHelpers.resizeIFrame()))
+          callback() if callback
 
 
-      getTracks()
+      getTracks ->
+        if $scope.tracks?.length
+          $scope.$emit 'setFirstTrack', $scope.tracks[0]
 
 
       $rootScope.$on 'improveList', ->
@@ -87,6 +90,33 @@ angular.module('aimprApp')
 
       initScroll (scroll, height) ->
         loadMore() if ($window.innerHeight - (scroll + height)) < 200
+
+
+      $scope.playOrStop = (track) ->
+        $scope.tracks.map (t) ->
+          t.is_playing = no if t.id isnt track.id
+          t
+
+        if TrackService.cur_playing
+          if TrackService.cur_playing.id is track.id
+            if track.is_playing
+              track.is_playing = no
+              $scope.$emit('pause', track)
+            else
+              track.is_playing = yes
+              $scope.$emit('play', track)
+          else
+            track.is_playing = yes
+            $scope.$emit('play', track)
+        else
+          track.is_playing = yes
+          $scope.$emit('play', track)
+
+        TrackService.cur_playing = angular.copy(track)
+
+
+
+
 
 
       $scope.addOrRemove = (track, opts = {}) ->

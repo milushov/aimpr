@@ -29,7 +29,8 @@ head
         .col-xs-3
           button.btn.btn-primary(ng-click='improveList()') Improve!
 
+      .row(ng-controller='PlayerCtrl' ng-include='"views/player.html"')
+
       .row
         .col-xs-9(ng-view)
-        .col-xs-3(ng-controller='FriendsCtrl')
-          ng-include(src='"views/friends.html"')
+        .col-xs-3(ng-controller='FriendsCtrl' ng-include='"views/friends.html"')
