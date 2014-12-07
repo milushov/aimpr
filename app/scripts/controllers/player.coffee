@@ -10,22 +10,31 @@
 angular.module('aimprApp')
   .controller 'PlayerCtrl', ['$scope', '$rootScope', ($scope, $rootScope) ->
     console.info('PlayerCtrl')
-    $scope.is_playing = no
     $scope.cur_playing = null
+
+    play = (track) ->
+
+    pause = (track) ->
+
+    $scope.playOrPause = ->
+      $scope.cur_playing.is_playing = !$scope.cur_playing.is_playing
+      if $scope.is_playing
+        play($scope.cur_playing)
+      else
+        stop($scope.cur_playing)
 
     $rootScope.$on 'setFirstTrack', (e, track) ->
       setCurPlaying(track)
-      $scope.is_playing = no
 
     $rootScope.$on 'play', (e, track) ->
       console.info('play')
-      $scope.is_playing = yes
       setCurPlaying(track)
+      play($scope.cur_playing)
 
     $rootScope.$on 'pause', (e, track) ->
       console.info('pause')
-      $scope.is_playing = no
       setCurPlaying(track)
+      pause($scope.cur_playing)
 
     setCurPlaying = (track) ->
       if !$scope.cur_playing? || $scope.cur_playing.id isnt track.id
