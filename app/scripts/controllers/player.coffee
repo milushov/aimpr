@@ -13,9 +13,10 @@ angular.module('aimprApp')
     $scope.is_playing = no
 
     $rootScope.$on 'play', (track) ->
+      console.info('play')
       $scope.is_playing = yes
 
-    $rootScope.$on 'stop', (track) ->
-      debugger
+    $rootScope.$on 'pause', (track) ->
+      console.info('pause')
       $scope.is_playing = no
   ]

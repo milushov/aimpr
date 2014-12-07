@@ -90,24 +90,26 @@ angular.module('aimprApp')
 
 
       $scope.playOrStop = (track) ->
-        $scope.tracks.map (t) -> t.is_playing = no; t
+        $scope.tracks.map (t) ->
+          t.is_playing = no if t.id isnt track.id
+          t
 
         if TrackService.cur_playing
           if TrackService.cur_playing.id is track.id
             if track.is_playing
               track.is_playing = no
-              $scope.$emit('stop', track)
+              $scope.$emit('pause', track)
             else
               track.is_playing = yes
               $scope.$emit('play', track)
           else
-            TrackService.cur_playing = angular.copy(track)
             track.is_playing = yes
             $scope.$emit('play', track)
         else
-          TrackService.cur_playing = angular.copy(track)
           track.is_playing = yes
           $scope.$emit('play', track)
+
+        TrackService.cur_playing = angular.copy(track)
 
 
 
