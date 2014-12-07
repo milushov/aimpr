@@ -8,8 +8,10 @@
 ###
 angular.module('aimprApp')
   .filter 'duration', ->
-    (input) ->
-      hours = Math.floor(input / 3600) || ''
+    (input, minutes_with_zerro) ->
+      hours = Math.floor(input / 3600)
       minutes = Math.floor((input - (hours * 3600)) / 60)
-      seconds = input - (hours * 3600) - (minutes * 60)
-      [hours, minutes, seconds].filter((el) -> el).join(':')
+      seconds = Math.floor(input - (hours * 3600) - (minutes * 60))
+      minutes = "0#{minutes}" if minutes_with_zerro && minutes < 10
+      seconds = "0#{seconds}" if seconds < 10
+      [hours, "#{minutes}:#{seconds}"].filter((el) -> el).join(':')

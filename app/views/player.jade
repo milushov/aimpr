@@ -1,5 +1,11 @@
 .row.player-wrapper
   .col-xs-1
     span.glyphicon(ng-click='playOrPause()' ng-class='{"glyphicon-play": !cur_playing.is_playing, "glyphicon-pause": cur_playing.is_playing}')
+
   .col-xs-11
-    .row {{cur_playing | trackName:60}}
+    .row
+      .col-xs-9 {{cur_playing | trackName:60}}
+      .col-xs-3
+        | {{cur_playing.duration - cur_time | duration}}
+    .row
+      input(ng-model='position.cur' type='range' min=0 max='{{::position.max}}')
