@@ -11,4 +11,4 @@ angular.module('aimprApp')
   .service 'Stat', ->
     @audio_count    = 0
     @improved_count = 0
-    @bad_count      = 0
+    @fail_count     = 0

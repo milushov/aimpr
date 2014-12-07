@@ -1,0 +1,9 @@
+
+
+
+
+.col-xs-3(ng-if='mode == "all"') всего {{audio_count}}
+.col-xs-3(ng-if='mode == "without_lyrics"') без текстов {{without_lyrics_count}}
+//-.col-xs-6 улучшено {{improved_count}} из {{bad_count}}
+.col-xs-3
+  button.btn.btn-primary(ng-click='improveList()') Improve!

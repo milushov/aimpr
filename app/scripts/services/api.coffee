@@ -95,6 +95,19 @@ angular.module('aimprApp')
             (data) -> processResponse(data, d)
         d.promise
 
+      getAudioCountAndLyricsIds: (id) ->
+        d = Q.defer()
+        VK.then (vk) ->
+          vk.api 'execute',
+            code: """
+              var a = API.audio.getCount({"owner_id": #{id}});
+              if (a > 6000) a = 6000;
+              var b = API.audio.get({"owner_id": #{id}}).items@.lyrics_id;
+              return { audio_count: a, without_lyrics: b };
+            """
+            (data) -> processResponse(data, d)
+        d.promise
+
       getLyrics: (lid) ->
         d = Q.defer()
         VK.then (vk) ->

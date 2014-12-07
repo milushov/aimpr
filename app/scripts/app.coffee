@@ -14,15 +14,7 @@ angular.module('aimprApp', [
   'truncate'
   'ngStorage'
   'cgNotify'
-]).config ($routeProvider, $locationProvider) ->
-
+]).config ['$locationProvider', ($locationProvider) ->
   # for proper working $location.search()
   $locationProvider.html5Mode(enabled: true, requireBase: false)
-
-  $routeProvider
-    .when('/',
-      templateUrl: '/views/tracks.html'
-      controller: 'TracksCtrl'
-    )
-
-    .otherwise redirectTo: '/'
+]

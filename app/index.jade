@@ -23,14 +23,8 @@ head
   body
     //-.container-fluid.aimpr(ng-controller='InfoCtrl')
     .container-fluid.aimpr
-      .row.app-header(ng-controller='InfoCtrl')
-        .col-xs-3 всего {{audio_count}}
-        .col-xs-6 улучшено {{improved_count}} из {{bad_count}}
-        .col-xs-3
-          button.btn.btn-primary(ng-click='improveList()') Improve!
-
+      .row.app-header(ng-controller='InfoCtrl' ng-include='"views/info.html"')
       .row(ng-controller='PlayerCtrl' ng-include='"views/player.html"')
-
       .row
-        .col-xs-9(ng-view)
+        .col-xs-9(ng-controller='TracksCtrl' ng-include='"views/tracks.html"')
         .col-xs-3(ng-controller='FriendsCtrl' ng-include='"views/friends.html"')
