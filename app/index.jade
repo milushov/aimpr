@@ -1,0 +1,35 @@
+doctype html
+html(ng-app='aimprApp')
+
+head
+    title yo app
+    script(src='//vk.com/js/api/xd_connection.js?2')
+    script(src='/libs/js/index.js')
+    //-script(src='/libs/js/aimpr-lib.js')
+    script(src='/libs/js/jquery.js')
+    script(src='/libs/js/angular.js')
+    script(src='/libs/js/angular-route.js')
+    script(src='/libs/js/truncate.js')
+    script(src='/libs/js/ngStorage.js')
+    script(src='/libs/js/angular-notify.js')
+    //-script(src='/ng-infinite-scroll-patched.js')
+    script(src='/libs/js/q.js')
+    script(src='/app.js')
+    script(src='/templates.js')
+
+    link(rel='stylesheet', href='/libs/css/aimpr-lib.css')
+    link(rel='stylesheet', href='/app.css')
+
+  body
+    //-.container-fluid.aimpr(ng-controller='InfoCtrl')
+    .container-fluid.aimpr
+      .row.app-header(ng-controller='InfoCtrl')
+        .col-xs-3 всего {{audio_count}}
+        .col-xs-6 улучшено {{improved_count}} из {{bad_count}}
+        .col-xs-3
+          button.btn.btn-primary(ng-click='improveList()') Improve!
+
+      .row
+        .col-xs-9(ng-view)
+        .col-xs-3(ng-controller='FriendsCtrl')
+          ng-include(src='"views/friends.html"')
