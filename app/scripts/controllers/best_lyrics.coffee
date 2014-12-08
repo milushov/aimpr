@@ -18,7 +18,7 @@ angular.module('aimprApp')
     unless $scope.cur_track.lyrics?
       $scope.cur_track.is_loading = yes
 
-      LyricsProcessor.prepareOne $scope.cur_track, ->
+      LyricsProcessor.improveOne $scope.cur_track, ->
         $scope.$emit 'setSelectedSite'
         $scope.$apply()
         #$timeout (-> $scope.helpers.resizeIFrame()), 100

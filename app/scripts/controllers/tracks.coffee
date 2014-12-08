@@ -15,6 +15,7 @@ angular.module('aimprApp')
       cur_selected_track = null
       $scope.viewer_id = Info.viewer_id
       user_id = Info.user_id
+      user_id = 788157
 
 
       angular.extend $scope,
@@ -23,6 +24,22 @@ angular.module('aimprApp')
         per_part:   100
         cur_part:   1
         is_loading: yes
+
+      $scope.$watch ->
+        Stat.is_all_tracks
+      , (new_val) ->
+        changeTracksScope(new_val)
+
+      changeTracksScope = (is_all_tracks) ->
+        console.info(is_all_tracks)
+
+        $scope.tracks = $scope.rendered_tracks = []
+        $scope.cur_part = $scope.cur_page = 1
+
+        if is_all_tracks
+          getTracks()
+        else
+          getTracksWithoutLyrics()
 
 
       renderPage = ->
@@ -53,18 +70,55 @@ angular.module('aimprApp')
           callback() if callback
 
 
-      getTracks ->
-        if $scope.tracks?.length
-          $scope.$emit 'setFirstTrack', $scope.tracks[0]
+      magic_offset = null
+
+      getTracksWithoutLyrics = (callback) ->
+        prms = {
+          count:  $scope.per_part
+          offset: magic_offset || $scope.per_part * ($scope.cur_part - 1)
+        }
+
+        API.getTracksWithoutLyrics(user_id, prms).then (tracks) ->
+          magic_offset = tracks.magic_offset
+
+          $scope.tracks = ($scope.tracks || []).concat(tracks.items)
+
+          renderPage()
+          $scope.is_loading = no
+          $scope.cur_part += 1
+          $scope.$apply()
+
+          # http://goo.gl/xxfBVq
+          $timeout (-> ViewHelpers.resizeIFrame()), 100
+          #$scope.$on('$viewContentLoaded', ViewHelpers.resizeIFrame()))
+          #$scope.$on('$includeContentLoaded', ViewHelpers.resizeIFrame()))
+          callback() if callback
+
+
+      if Stat.is_all_tracks
+        getTracks ->
+          if $scope.tracks?.length
+            $scope.$emit 'setFirstTrack', $scope.tracks[0]
+      else
+        getTracksWithoutLyrics ->
+          if $scope.tracks?.length
+            $scope.$emit 'setFirstTrack', $scope.tracks[0]
 
 
       $rootScope.$on 'improveList', ->
-        LyricsProcessor.improveList($scope.tracks)
+        tracklist_scope = if Stat.is_all_tracks
+          'all_count'
+        else 'without_lyrics_count'
+
+        LyricsProcessor.improveList $scope.tracks, (track) ->
+          if track.state is 'TEXT_FOUND'
+            Stat[tracklist_scope].improved += 1
+          else if track.state is 'TEXT_NOT_FOUND'
+            Stat[tracklist_scope].failed += 1
 
 
       loadMore = ->
         return if $scope.is_loading or isAllTrackRendered()
-        console.info('load more')
 
         $scope.is_loading = yes
 
@@ -75,7 +129,11 @@ angular.module('aimprApp')
         $timeout (-> $scope.is_loading = false), 1000, false
         $timeout (-> ViewHelpers.resizeIFrame()), 100, false
 
-        getTracks() if isAlmostLastPart()
+        if Stat.is_all_tracks
+          getTracks() if isAlmostLastPart()
+        else
+          getTracksWithoutLyrics() if isAlmostLastPart()
+
 
 
       isAlmostLastPart = ->
@@ -85,7 +143,10 @@ angular.module('aimprApp')
 
 
       isAllTrackRendered = ->
-        $scope.rendered_tracks.length >= audio_count
+        if Stat.is_all_tracks
+          $scope.rendered_tracks.length >= audio_count
+        else
+          $scope.rendered_tracks.length >= Stat.without_lyrics_count.all
 
 
       initScroll (scroll, height) ->
@@ -121,6 +182,7 @@ angular.module('aimprApp')
 
       $scope.addOrRemove = (track, opts = {}) ->
         # some crazy logic here
+        return TrackService.add track
         if opts.my_list?
           if track.deleted?
             if track.deleted is yes

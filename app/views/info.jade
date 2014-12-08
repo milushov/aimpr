@@ -1,9 +1,16 @@
+.col-xs-3
+  input(type='checkbox' ng-model='stat.is_all_tracks')
 
+.col-xs-6
+  .row
+    .col-xs-4 всего
+    .col-xs-5 улучшено
+    .col-xs-3 зафейлено
 
+  .row
+    .col-xs-4 {{stat[ stat.is_all_tracks ? 'all_count' : 'without_lyrics_count' ].all}}
+    .col-xs-4 {{stat[ stat.is_all_tracks ? 'all_count' : 'without_lyrics_count' ].improved}}
+    .col-xs-4 {{stat[ stat.is_all_tracks ? 'all_count' : 'without_lyrics_count' ].failed}}
 
-
-.col-xs-3(ng-if='mode == "all"') всего {{audio_count}}
-.col-xs-3(ng-if='mode == "without_lyrics"') без текстов {{without_lyrics_count}}
-//-.col-xs-6 улучшено {{improved_count}} из {{bad_count}}
 .col-xs-3
   button.btn.btn-primary(ng-click='improveList()') Improve!

@@ -27,7 +27,7 @@ angular.module('aimprApp')
       @prepareList(tracks, callback)
 
 
-    @prepareOne = (track, callback) ->
+    @improveOne = (track, callback) ->
       @prepareList([track], callback)
 
 
@@ -59,23 +59,22 @@ angular.module('aimprApp')
           determined = determineBestLyrics(data.items)
           track.best_lyrics_from = from_storage || determined
 
-          console.info(track.best_lyrics_from)
-
-          track.state = 'text_finded'
+          track.state = 'TEXT_FOUND'
           track.need_to_save = yes # just for dev
 
         else
-          track.state = 'text_not_finded'
-          console.info('text_not_finded')
+          track.state = 'TEXT_NOT_FOUND'
+          console.info('TEXT_NOT_FOUND')
 
-        callback()
+        callback(track)
 
       fail = (error, track, req_number) ->
         if req_number is 0
+          track.state = 'SERVER_ERROR'
           track.is_loading = no
           is_processing = no
         console.error(error.message)
-        callback()
+        callback(track)
 
       check_interval = ->
         console.info('queue.length', queue.length)

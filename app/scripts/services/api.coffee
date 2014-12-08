@@ -52,6 +52,61 @@ angular.module('aimprApp')
             (data) -> processResponse(data, d)
         d.promise
 
+      getTracksWithoutLyrics: (uid, prms = {}) ->
+        # optimal count is 100
+        d = Q.defer()
+        VK.then (vk) ->
+          vk.api 'execute',
+            code: """
+              var count = #{prms.count},
+                  over_count = count*2,
+                  offset = #{prms.offset},
+                  i = 0,
+                  magic_offset = null,
+                  audio_ids = "";
+
+              var a = API.audio.get({
+                owner_id: #{uid},
+                offset: offset,
+                count: over_count
+              }).items;
+
+              var x = 0;
+
+              while (i <= a.length) {
+                if(!a[i].lyrics_id && !magic_offset) {
+                  x = x + 1;
+                  audio_ids = audio_ids + "," + a[i].id;
+                }
+
+                i = i + 1;
+                if(x == count) {
+                  magic_offset = offset + i;
+                  i = 100500;
+                }
+              }
+
+              var audio_without_lyrics = null;
+
+              if(audio_ids != ",") {
+                audio_without_lyrics = API.audio.get({
+                  owner_id: #{uid},
+                  audio_ids: audio_ids
+                }).items;
+              } else {
+                audio_without_lyrics = [];
+              }
+
+              if(!magic_offset) magic_offset = offset + over_count;
+
+              return {
+                items: audio_without_lyrics,
+                magic_offset: magic_offset
+              };
+            """
+            (data) -> processResponse(data, d)
+        d.promise
+
       searchTrack: (q, own = 0) ->
         lyrics = if own? then 0 else 1
         d = Q.defer()
