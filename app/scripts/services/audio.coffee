@@ -12,8 +12,11 @@ angular.module('aimprApp')
 
     el: el
     play: (url) ->
-      el.src = url
+      el.src = url if url
       el.play()
     pause: ->
       el.pause()
+    setEndHandler: (callback) ->
+      el.onended = callback
+
   ]

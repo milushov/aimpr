@@ -9,13 +9,23 @@
 ###
 angular.module('aimprApp')
   .controller 'InfoCtrl',
-    ['$scope', 'Stat', 'API', 'Info'
-    ($scope, Stat, API, Info) ->
+    ['$scope', 'Stat', 'API', 'Info', 'Ladda'
+    ($scope, Stat, API, Info, ladda) ->
+      console.info('InfoCtrl')
 
       $scope.stat = Stat
 
+      improve = ->
+        $scope.$emit 'improveList'
+        ladda.start()
+
+      # emit to TracksCtrl
       $scope.improveList = ->
-        $scope.$emit('improveList')
+        if Info.viewer_id is Info.user_id
+          improve()
+        else
+          $scope.$emit 'showUserTracks', Info.viewer_id, ->
+            improve()
 
       API.getAudioCountAndLyricsIds(Info.viewer_id).then (data) ->
         $scope.stat.all_count.all = data.audio_count

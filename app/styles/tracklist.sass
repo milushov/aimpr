@@ -1,0 +1,51 @@
+@import '_variables'
+
+$lighten-green: lighten($green, 30%)
+
+.tracklist-wrapper
+  overflow: hidden
+
+.tracklist
+  margin-top: 15px
+
+.track-deleted
+  background-color: #eaedf0
+
+.track-body
+  overflow: hidden
+  border-radius: 3px
+  padding-top: 2px
+  padding-bottom: 2px
+
+.track-duration
+  display: block
+
+.add-remove-btn
+  display: none
+  float: right
+  margin-top: 1.5px
+
+.track-body
+  &:hover
+    background-color: $lighten-green
+
+    .track-duration
+      display: none
+
+    .add-remove-btn
+      display: block
+
+  a:hover
+    color: darken($gray, 10%)
+
+.track-body.active
+  background-color: $lighten-green
+
+.duration-or-btn
+  text-align: right
+  padding-left: 0
+  padding-right: 27px
+
+.track-text
+  width: 100%
+  outline: 0

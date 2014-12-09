@@ -1,7 +1,6 @@
+@import '_variables';
 @import url(http://fonts.googleapis.com/css?family=Roboto:300);
 
-// color
-$green: #87d3b7;
 
 // TAB ~~~~~~~~~~~~~~~ (.)(.)
 .tab {
@@ -13,6 +12,7 @@ $green: #87d3b7;
   font-weight: 300;
   color: #888;
   -webkit-font-smoothing: antialiased;
+  padding: 10px
 }
 
 .tabs {
@@ -20,6 +20,7 @@ $green: #87d3b7;
   position: relative;
   overflow: hidden;
   margin: 0;
+  padding: 0;
   width: 100%;
 
   li {
@@ -30,7 +31,7 @@ $green: #87d3b7;
     position: relative;
   }
 
-  a {
+  a:not(.btn) {
     background-color: #eff0f2;
     border-bottom: 1px solid #fff;
     color: #888;
@@ -72,3 +73,9 @@ $green: #87d3b7;
 }
 
 // END TAB ~~~~~~~~~~~~~~~ (.)(.)
+
+
+.save-lyrics {
+  margin-top: 3px;
+  float: right;
+}

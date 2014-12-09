@@ -6,23 +6,18 @@
  # Factory in the aimprApp.
 ###
 angular.module('aimprApp')
-  .service 'ViewHelpers', ['$routeParams', 'VK', ($routeParams, VK) ->
-
-    @isTrackView = ->
-      !!$routeParams.trackId
+  .service 'ViewHelpers', ['$document', 'VK', ($document, VK) ->
 
     @resizeIFrame = ->
-      body = document.querySelector('body')
+      body = $document[0].querySelector('body')
       body.style.height = 'auto'
       rect = body.getBoundingClientRect()
       body.style.height = "#{rect.height}px"
 
-      VK.then (vk) ->
-        vk.callMethod 'resizeWindow', rect.width, rect.height
-        return
+      diff = 15
 
-      console.info('iframe resized')
-      return
+      VK.then (vk) ->
+        vk.callMethod 'resizeWindow', rect.width, rect.height + diff
 
     return
   ]

@@ -23,20 +23,20 @@ angular.module('aimprApp')
       best_text
 
 
-    @improveList = (tracks, callback) ->
-      @prepareList(tracks, callback)
+    @improveList = (tracks, callback, finish_callback) ->
+      @prepareList(tracks, callback, finish_callback)
 
 
-    @improveOne = (track, callback) ->
-      @prepareList([track], callback)
+    @improveOne = (track, callback, finish_callback) ->
+      @prepareList([track], callback, finish_callback)
 
 
     is_processing = no
     @prepareList = (tracks, callback) ->
-      queue = Object.keys(tracks)[..5]
+      queue = Object.keys(tracks)
       return notify(
         message: 'processing already started'
-        classes: 'alert-danger'
+        classes: 'my-alert-danger'
       ) if is_processing
       is_processing = yes
 
@@ -76,9 +76,11 @@ angular.module('aimprApp')
         console.error(error.message)
         callback(track)
 
-      check_interval = ->
+      checkQueue = ->
         console.info('queue.length', queue.length)
-        $interval.cancel(stop_time) if queue.length is 0
+        if queue.length is 0
+          $interval.cancel(stop_time)
+          finish_callback()
 
       tick = (track) ->
         # how much requsts i expect
@@ -88,10 +90,10 @@ angular.module('aimprApp')
 
         API.getLyricsFromApi(track).then (data) ->
           success(data, track, (req_number -= 1))
-          check_interval()
+          checkQueue()
         , (error) ->
           fail(error, track, (req_number -= 1))
-          check_interval()
+          checkQueue()
 
         # i'm not merge second call to api to first,
         # cause this aproach make interface response more long
@@ -99,10 +101,10 @@ angular.module('aimprApp')
         # we get nice interface response speed
         API.searchTracksWithLyrics(track).then (data) ->
           success(data, track, (req_number -= 1))
-          check_interval()
+          checkQueue()
         , (error) ->
           fail(error, track, (req_number -= 1))
-          check_interval()
+          checkQueue()
 
 
       tick(tracks[queue.shift()])

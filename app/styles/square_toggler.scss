@@ -1,44 +1,34 @@
+@import '_variables';
 // get from here http://codepen.io/WhiteWolfWizard/pen/OPygrz?editors=011
 // thanks to @WhiteWolfWizard
 
 $size: 17px;
 $base: #fff;
-$color: #87d3b7;
+$color: $gray;
 $transition: 300ms cubic-bezier(0.680,-0.550,0.265,1.550);
 
-// FRAME
-.frame {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+// TOGGLE
+.square-toggle {
+  cursor: pointer;
+  position: relative;
+  width: $size;
   height: $size;
-  margin: auto;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-  margin-top: 0px;
+  margin: 0 10px;
 
-  // TOGGLE
-  .toggle {
-    cursor: pointer;
-    position: relative;
-    width: $size; height: $size;
-    margin: 0 10px;
+  // SQUARE
+  &.square {
+    border-radius: ($size / 4);
+    background-color: $color;
+    background-image: linear-gradient(90deg,transparent 45%,$base 45%,$base 55%,transparent 55%),
+      linear-gradient(0deg,transparent 45%,$base 45%,$base 55%,transparent 55%),
+      linear-gradient(45deg,transparent 46%,$base 46%,$base 54%,transparent 54%),
+      linear-gradient(-45deg,transparent 46%,$base 46%,$base 54%,transparent 54%);
+    background-position: 50% 50%, 50% 50%, 515% 50%, 515% 50%;
+    background-repeat: no-repeat;
+    background-size: ($size / 1.5) ($size / 1.5);
+    transition: background-position $transition;
 
-    // SQUARE
-    &.square {
-      border-radius: ($size / 4);
-      background-color: $color;
-      background-image: linear-gradient(90deg,transparent 45%,$base 45%,$base 55%,transparent 55%),
-        linear-gradient(0deg,transparent 45%,$base 45%,$base 55%,transparent 55%),
-        linear-gradient(45deg,transparent 46%,$base 46%,$base 54%,transparent 54%),
-        linear-gradient(-45deg,transparent 46%,$base 46%,$base 54%,transparent 54%);
-      background-position: 50% 50%, 50% 50%, 515% 50%, 515% 50%;
-      background-repeat: no-repeat;
-      background-size: ($size / 1.5) ($size / 1.5);
-      transition: background-position $transition;
-
-      // SQUARE ACTIVE
-      &.active { background-position: -515% 50%, -515% 50%, 50% 50%, 50% 50%; }
-    }
+    // SQUARE ACTIVE
+    &.active { background-position: -515% 50%, -515% 50%, 50% 50%, 50% 50%; }
   }
 }

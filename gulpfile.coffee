@@ -34,7 +34,7 @@ gulp.task 'coffee', ->
 
 # combine all js files of the build
 gulp.task 'js', ->
-  gulp.src 'build/scripts/**/*.js'
+  gulp.src ['build/scripts/**/*.js', 'app/scripts/vendor/**/*.js']
     #.pipe $.jshint()
     #.pipe $.jshint.reporter('jshint-stylish')
     .pipe $.concat('app.js')
@@ -103,6 +103,7 @@ gulp.task 'get_libs', ->
     .pipe jsFilter.restore()
 
     .pipe cssFilter
+    #.pipe $.debug()
     .pipe gulp.dest(dest_path + 'libs/css')
     .pipe cssFilter.restore()
 
@@ -144,7 +145,7 @@ gulp.task 'default', ['clean'], ->
 
   gulp.watch 'app/**/*.jade', -> $.runSequence 'views'
   gulp.watch 'app/**/*.html', ['html', 'templates']
-  gulp.watch 'app/**/*.coffee', ['scripts']
+  gulp.watch ['app/**/*.coffee', 'app/scripts/vendor/**/*.js'], ['scripts']
   gulp.watch ['app/**/*.sass', 'app/**/*.scss'], ['styles']
   gulp.watch 'app/images/**/*', ['images']
 

@@ -9,7 +9,8 @@
 ###
 
 angular.module('aimprApp')
-  .factory 'API', ['$http', 'VK', 'notify', ($http, VK, notify) ->
+  .factory 'API', ['$http', '$timeout', 'VK', 'notify', ($http, $timeout, VK, notify) ->
+    is_server_died = no
 
     getApiUrl = (q) ->
       domain = if /localhost/.test(location.hostname)
@@ -26,17 +27,23 @@ angular.module('aimprApp')
         # show error through notify only from VK
         notify(
           message: error_msg
-          classes: 'alert-danger'
+          classes: 'my-alert-danger'
         ) if typeof data.error is 'object'
         deferred.reject(new Error(error_msg))
 
 
+
     processServerError = (data, status, deferred) ->
-      error_msg = 'server is died :( please try again later'
-      notify(
-        message: error_msg
-        classes: 'alert-danger'
-      )
+      error_msg =
+      unless is_server_died
+        notify(
+          message:  'server is died :( please try again later'
+          classes: 'my-alert-danger'
+        )
+
+        $timeout (-> is_server_died = no), 10000
+
+      is_server_died = yes
       deferred.reject(new Error(error_msg))
 
 

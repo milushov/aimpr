@@ -1,9 +1,36 @@
-.player-wrapper
-  border-radius: 5px
-  background-color: #82eaff
+@import '_variables'
+@import url("//fonts.googleapis.com/css?family=Montserrat:700")
 
-.player-play-or-stop-wrapper:hover
-  background-color: red
+.player-wrapper
+  overflow: hidden
+  border-radius: 5px
+  background-color: $gray
+
+.player-play-or-stop-wrapper
+  padding-top: 3px
+  padding-bottom: 3px
+  width: 14%
+
+  &:hover
+    background-color: darken($gray, 7%)
 
 .player-play-or-stop
   font-size: 40px
+  color: $green
+  cursor: pointer
+
+.player-body
+  margin: 5px 10px 0 10px
+  width: 80%
+
+.player-track-name
+  color: #fff
+  text-shadow: 0px 1px 1px #000
+
+.player-track-duration
+  text-align: right
+  padding-left: 0
+  padding-right: 5px
+
+.player-slider
+  margin-top: 3px

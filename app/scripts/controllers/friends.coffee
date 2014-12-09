@@ -6,10 +6,10 @@
  # Controller of the aimprApp
 ###
 angular.module('aimprApp')
-  .controller 'FriendsCtrl', ['$scope', '$interval', 'API', ($scope, $interval, API) ->
+  .controller 'FriendsCtrl', ['$scope', '$interval', 'API', 'Info', ($scope, $interval, API, Info) ->
     console.info('FriendsCtrl')
     friends_count = 0
-    per_page = 10/2
+    per_page = 7
     cur_page = 1
     per_part = 15
     cur_part = 1
@@ -17,6 +17,11 @@ angular.module('aimprApp')
     $scope.search = name: ''
     $scope.is_loading = no # for getFriendsByName
     is_all_friends_loaded = no
+    $scope.user_id = Info.user_id
+    $scope.viewer_id = Info.viewer_id
+
+    $scope.$watch (-> Info.user_id), (new_val) -> $scope.user_id = new_val
+    $scope.$watch (-> Info.viewer_id), (new_val) -> $scope.viewer_id = new_val
 
 
     renderPage = (dir) ->

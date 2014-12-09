@@ -1,19 +1,27 @@
-.col-xs-5
-  .toggle.slide2
-    input#d(type='checkbox' ng-model='stat.is_all_tracks')
-    label(for='d')
-      .card
+.toggle.slide2
+  input#d(type='checkbox' ng-model='stat.is_all_tracks')
+  label(for='d')
+    .card
 
-.col-xs-4
-  .row
-    .col-xs-4 всего
-    .col-xs-5 улучшено
-    .col-xs-3 зафейлено
+.info
+  div
+    .row всего
+    .row: b
+      {{stat[ stat.is_all_tracks ? 'all_count' : 'without_lyrics_count' ].all}}
 
-  .row
-    .col-xs-4 {{stat[ stat.is_all_tracks ? 'all_count' : 'without_lyrics_count' ].all}}
-    .col-xs-4 {{stat[ stat.is_all_tracks ? 'all_count' : 'without_lyrics_count' ].improved}}
-    .col-xs-4 {{stat[ stat.is_all_tracks ? 'all_count' : 'without_lyrics_count' ].failed}}
+  div
+    .row улучшено
+    .row: b
+      {{stat[ stat.is_all_tracks ? 'all_count' : 'without_lyrics_count' ].improved}}
 
-.col-xs-3
-  button.btn.btn-primary(ng-click='improveList()') Improve!
+  div
+    .row зафейлено
+    .row: b
+      {{stat[ stat.is_all_tracks ? 'all_count' : 'without_lyrics_count' ].failed}}
+
+.improve-button
+  button.ladda-button(post-render='ladda-init' ng-click='improveList()' data-style='expand-right' data-color='aimpr' data-size='s' data-spinner-color='AliceBlue')
+    span.ladda-label Улучшить
+
+span.glyphicon.glyphicon-info-sign.modal-trigger.wtf(data-modal-id='wtf')
+

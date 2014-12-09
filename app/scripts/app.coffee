@@ -8,8 +8,8 @@
 #/
 
 angular.module('aimprApp', [
-  #'ngAnimate',
-  #'ngCookies'
+  'ngAnimate'
+  'monospaced.elastic'
   'ngRoute'
   'truncate'
   'ngStorage'

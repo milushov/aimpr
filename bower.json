@@ -33,7 +33,9 @@
     "angular-notify": "~2.0.2",
     "async": "~0.9.0",
     "async-each": "~0.1.6",
-    "Bootflat": "~2.0.4"
+    "ladda": "~0.9.4",
+    "angular-elastic": "~2.4.2",
+    "bootswatch-sass": "~3.3.1"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",
@@ -45,6 +47,18 @@
       "main": [
         "dist/**/*.js",
         "dist/**/*.css"
+      ]
+    },
+    "ladda": {
+      "main": [
+        "dist/**/*.js",
+        "dist/**/*.css"
+      ]
+    },
+    "bootswatch-sass": {
+      "main": [
+        "flatly/*.js",
+        "flatly/*.css"
       ]
     }
   }

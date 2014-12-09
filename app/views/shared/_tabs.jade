@@ -4,9 +4,8 @@
       a(ng-click = 'select(site)') {{site}}
     | &#x9;&#x9;
 
-    span
-      a.btn.btn-primary(ng-show='texts' ng-click='save(selected_site)') Сохранить
+    a.btn.btn-success.btn-sm.save-lyrics(ng-show='texts' ng-click='save(selected_site)') Сохранить
 
   .tab_content
     .tabs_item(ng-repeat='(site, text) in texts track by $index')
-      pre {{text}}
+      textarea.form-control.msd-elastic.track-text(ng-model='text' rows=3) {{text}}
