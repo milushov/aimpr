@@ -140,6 +140,10 @@ gulp.task 'compile_libs', ->
     .pipe $.flatten()
     .pipe gulp.dest(dest_path + 'libs/fonts')
 
+gulp.task 'deploy', ->
+  gulp.src('build/**/*')
+    .pipe $.ghPages()
+
 gulp.task 'default', ['clean'], ->
   gulp.start ['build', 'html', 'connect']
 
