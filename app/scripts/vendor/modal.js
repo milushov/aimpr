@@ -12,14 +12,14 @@ $(function(){
     }
 
     ,modals: {
-      trigger: $('.modal-trigger'),
-      trigger_class: '.modal-trigger',
-      modal: $('.modal'),
+      trigger: $('.yo-modal-trigger'),
+      trigger_class: '.yo-modal-trigger',
+      modal: $('.yo-modal'),
       scrollTopPosition: null,
 
       init: function () {
         var self = this;
-        modules.$body.append('<div class="modal-overlay"></div>');
+        modules.$body.append('<div class="yo-modal-overlay"></div>');
         self.triggers();
       },
 
@@ -32,7 +32,7 @@ $(function(){
           self.openModal($trigger, $trigger.data('modalId'));
         });
 
-        $('.modal-overlay').on('click', function (e) {
+        $('.yo-modal-overlay').on('click', function (e) {
           e.preventDefault();
           self.closeModal();
         });
@@ -43,7 +43,7 @@ $(function(){
           }
         });
 
-        $('.modal-close').on('click', function(e) {
+        $('.yo-modal-close').on('click', function(e) {
           e.preventDefault();
           self.closeModal();
         });
@@ -57,10 +57,10 @@ $(function(){
         self.scrollTopPosition = scrollTopPosition;
 
         modules.$html
-          .addClass('modal-show')
+          .addClass('yo-modal-show')
           .attr('data-modal-effect', $targetModal.data('modal-effect'));
 
-        $targetModal.addClass('modal-show');
+        $targetModal.addClass('yo-modal-show');
 
         modules.$container.scrollTop(scrollTopPosition);
       },
@@ -68,9 +68,9 @@ $(function(){
       closeModal: function () {
         var self = this;
 
-        $('.modal-show').removeClass('modal-show');
+        $('.yo-modal-show').removeClass('yo-modal-show');
         modules.$html
-          .removeClass('modal-show')
+          .removeClass('yo-modal-show')
           .removeAttr('data-modal-effect');
 
         modules.$window.scrollTop(self.scrollTopPosition);

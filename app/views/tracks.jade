@@ -2,4 +2,4 @@ player(ng-controller='PlayerCtrl' ng-include='"views/player.html"')
 
 .tracklist(ng-class='{reload: reload}')
   .row(ng-repeat='track in rendered_tracks track by $index')
-    div(ng-include='"views/shared/_track.html"')
+    div(ng-include='"views/shared/track.html"')

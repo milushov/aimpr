@@ -1,17 +1,17 @@
 @import '_variables';
 
 /*
-  All credits for the modal effects go to Codrops:
+  All credits for the yo-modal effects go to Codrops:
   http://tympanus.net/codrops/2013/06/25/nifty-modal-window-effects
 */
 
 /*==============================
-=            Modals            =
+=            modals            =
 ==============================*/
-.modal {
+.yo-modal {
   position: fixed;
   display: block;
-  top: 50%;
+  top: 300px;
   left: 50%;
   width: 80%;
   max-width: 630px;
@@ -24,11 +24,11 @@
   overflow: hidden;
   border-radius: 3px;
 }
-.modal.modal-show {
+.yo-modal.yo-modal-show {
   visibility: visible;
 }
 
-.modal-content-header {
+.yo-modal-content-header {
   background-color: #ccc;
   font-size: 20px;
   font-weight: bold;
@@ -40,7 +40,7 @@
   text-shadow: 0px 1px 1px black;
 }
 
-.modal-content {
+.yo-modal-content {
   background: #ffffff;
   position: relative;
   margin: 0 auto;
@@ -49,7 +49,7 @@
   overflow: hidden;
 }
 
-.modal-overlay {
+.yo-modal-overlay {
   background: #000000;
   position: fixed;
   visibility: hidden;
@@ -64,7 +64,7 @@
   transition-duration: 0, 0.5s;
 }
 
-.modal-show .modal-overlay {
+.yo-modal-show .yo-modal-overlay {
   visibility: visible;
   opacity: 0.6;
   transition: opacity 0.5s;
@@ -74,18 +74,22 @@
 /*=======================================
 =            Fade in & scale            =
 =======================================*/
-.modal[data-modal-effect=fadescale] .modal-content {
+.yo-modal[data-yo-modal-effect=fadescale] .yo-modal-content {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
   transform: scale(0.7, 0.7);
   transition: all 0.3s;
 }
-.modal[data-modal-effect=fadescale].modal-show .modal-content {
+.yo-modal[data-yo-modal-effect=fadescale].yo-modal-show .yo-modal-content {
   filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
   opacity: 1;
   transform: scale(1, 1);
 }
 
-.modal-close {
+.yo-modal-close {
   float: right;
+}
+
+.yo-screenshot {
+  width: 100%;
 }

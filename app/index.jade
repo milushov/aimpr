@@ -34,12 +34,12 @@ head
         .col-xs-9.tracklist-wrapper(ng-controller='TracksCtrl' ng-include='"views/tracks.html"' )
         .col-xs-3(ng-controller='FriendsCtrl' ng-include='"views/friends.html"')
 
-      #wtf.modal(data-modal-effect='fadescale')
-        .modal-content
-          .modal-content-header
+      #wtf.yo-modal(data-modal-effect='fadescale')
+        .yo-modal-content
+          .yo-modal-content-header
             | Что это? Зачем?
           p
             Слушая музыку ВК частенько хочется посмотрть текст песни, но некоторые паблики вместо текста песни пихают туда ссылки или прочий спам. И приходится искать текст песни вручную. Этот апп с помощью одной кнопочки найдет тексты песен для всех таких треков в вашем списке аудиозаписей. Такие дела.
           p
-            img(src='images/screenshot-1.png')
-          a.btn.btn-success.modal-close(href='#') оке
+            img.yo-screenshot(src='images/screenshot-1.png')
+          a.btn.btn-success.yo-modal-close(href='#') оке

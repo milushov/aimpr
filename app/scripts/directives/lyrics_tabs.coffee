@@ -6,7 +6,7 @@
 ###
 angular.module('aimprApp')
   .directive 'lyricsTabs', ['$rootScope', 'TrackService', (rootScope, TrackService) ->
-    templateUrl: '/views/shared/_tabs.html'
+    templateUrl: '/views/shared/tabs.html'
     restrict: 'E'
     scope: {
       texts: '=' #http://jsfiddle.net/joshdmiller/FHVD9/
