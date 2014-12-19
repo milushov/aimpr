@@ -1,0 +1,17 @@
+.depth {
+  display: block;
+  color: rgb(25, 123, 67);
+  font: bold 1em Arial, sans-serif;
+  position: relative;
+}
+
+.depth:after {
+  content: attr(title);
+  color: white;
+  position: absolute;
+}
+
+.depth:after {
+  top: 1px;
+  left: -1px;
+}
