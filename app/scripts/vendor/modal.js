@@ -46,6 +46,7 @@ $(function(){
         $('.yo-modal-close').on('click', function(e) {
           e.preventDefault();
           self.closeModal();
+          localStorage['wtf_read'] = true;
         });
       },
 
