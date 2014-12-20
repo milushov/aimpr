@@ -11,11 +11,11 @@ angular.module('aimprApp')
 
       #$scope.stat = Stat
       console.info('TracksCtrl')
-      audio_count = Info.audio_count
       cur_selected_track = null
       $scope.viewer_id = Info.viewer_id
       user_id = Info.user_id
       magic_offset = null # for Gettrackswithoutlyrics
+      audio_count = null
       #user_id = 788157
 
       angular.extend $scope,
@@ -63,6 +63,7 @@ angular.module('aimprApp')
 
         API.getTracks(user_id, prms).then (tracks) ->
           $scope.tracks = ($scope.tracks || []).concat(tracks.items)
+          audio_count = tracks.count
 
           renderPage()
           $scope.is_loading = no
@@ -85,6 +86,7 @@ angular.module('aimprApp')
         API.getTracksWithoutLyrics(user_id, prms).then (tracks) ->
           magic_offset = tracks.magic_offset
           $scope.tracks = ($scope.tracks || []).concat(tracks.items)
+          audio_count = Info.without_lyrics_count
           renderPage()
           $scope.is_loading = no
           $scope.cur_part += 1
@@ -128,16 +130,12 @@ angular.module('aimprApp')
 
 
       loadMore = ->
-        console.info('------------loadMore')
-
         $scope.is_loading = yes
-        console.info('cur_page 1', $scope.cur_page)
         renderPage()
-        console.info('cur_page 2', $scope.cur_page)
         $scope.$apply()
-
-        $timeout (-> $scope.is_loading = false), 1000, false
-        $timeout (-> ViewHelpers.resizeIFrame()), 1000, false
+        #$scope.is_loading = false
+        $timeout (-> $scope.is_loading = false), 500, false
+        $timeout (-> ViewHelpers.resizeIFrame()), 500, false
 
         if isAlmostLastPart()
           if Stat.is_all_tracks || !isMyList()
@@ -151,15 +149,17 @@ angular.module('aimprApp')
       isAlmostLastPart = ->
         all_tacks_count = $scope.tracks.length
         last_page = Math.floor(all_tacks_count / $scope.per_page)
-        console.info('isAlmostLastPart', 'last_page', last_page, '$scope.cur_page', $scope.cur_page)
         $scope.cur_page is last_page
 
 
+      # annoying feature from VK api -- api says that user have one count of tracks,
+      # but actually return less tracks, i think it's because rightholders removes some tracks
+      # and condition rendered_tracks.length >= audio_count not working as designed
       isAllTrackRendered = ->
-        if Stat.is_all_tracks
-          $scope.rendered_tracks.length >= audio_count
+        if Stat.is_all_tracks || !isMyList()
+          $scope.rendered_tracks?.length >= audio_count
         else
-          $scope.rendered_tracks.length >= Stat.without_lyrics_count.all
+          $scope.rendered_tracks?.length >= Stat.without_lyrics_count.all
 
 
       initScroll (scroll, height) ->

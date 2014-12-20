@@ -30,4 +30,5 @@ angular.module('aimprApp')
       API.getAudioCountAndLyricsIds(Info.viewer_id).then (data) ->
         $scope.stat.all_count.all = data.audio_count
         $scope.stat.without_lyrics_count.all = (data.without_lyrics.filter (el) -> !el).length
+        Info.without_lyrics_count = $scope.stat.without_lyrics_count.all
     ]

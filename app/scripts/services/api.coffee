@@ -15,7 +15,7 @@ angular.module('aimprApp')
     getApiUrl = (q) ->
       domain = if /localhost/.test(location.hostname)
         'https://localhost:5001'
-      else 'https://aimpr.milushov.ru'
+      else 'https://aimpr.milushov.ru:5001'
       "#{domain}/search/#{q}"
 
 
