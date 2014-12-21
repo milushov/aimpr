@@ -14,8 +14,8 @@ angular.module('aimprApp')
 
     getApiUrl = (q) ->
       domain = if /localhost/.test(location.hostname)
-        'https://localhost:5001'
-      else 'https://aimpr.milushov.ru:5001'
+        'https://localhost:2053'
+      else 'https://aimpr.milushov.ru:2053'
       "#{domain}/search/#{q}"
 
 
@@ -30,7 +30,6 @@ angular.module('aimprApp')
           classes: 'my-alert-danger'
         ) if typeof data.error is 'object'
         deferred.reject(new Error(error_msg))
-
 
 
     processServerError = (data, status, deferred) ->
@@ -178,14 +177,19 @@ angular.module('aimprApp')
             (data) -> processResponse(data, d)
         d.promise
 
-      saveTrack: (oid, aid, text)->
+      saveTrack: (oid, track)->
         d = Q.defer()
-        VK.then (vk) ->
-          vk.api 'audio.edit',
-            owner_id: oid
-            audio_id: aid
-            text:     text
-            (data) -> processResponse(data, d)
+
+        if track.need_to_save
+          VK.then (vk) ->
+            vk.api 'audio.edit',
+              owner_id: oid
+              audio_id: track.id
+              text:     track.lyrics[track.best_lyrics_from]
+              (data) -> processResponse(data, d)
+        else
+          processResponse(response: track.id, d)
+
         d.promise
 
       addTrack: (track)->
@@ -230,7 +234,7 @@ angular.module('aimprApp')
       getLyricsFromApi: (track) ->
         q = "#{track.artist} #{track.title}"
         d = Q.defer()
-        $http.get(getApiUrl(q), timeout: 4000).success (data) ->
+        $http.get(getApiUrl(q), timeout: 3000).success (data) ->
           processResponse(data, d)
         .error (data, status, headers, config) ->
           processServerError(data, status, d)

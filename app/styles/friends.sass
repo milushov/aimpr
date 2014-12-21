@@ -8,10 +8,10 @@
 
 .friend-item
   &.active
-    background-color: lighten($green, 10%)
+    background-color: $lighten-gray
 
 .friends-list
-  &:not(:first-child)
+  .friend-item:not(:first-child)
     margin-top: 3px
 
 .friend-name
@@ -25,19 +25,23 @@
   border-radius: 3px
 
 .friend-item:hover
-  background-color: #eeedf0
+  background-color: $lighten-gray
 
 .search-wrapper
   position: relative
   width: 150px
-  transition: 300ms 50ms cubic-bezier(0.23, 1, 0.32, 1) all
+  transition: 300ms cubic-bezier(0.23, 1, 0.32, 1) all
   float: left
+
   &.with-btn
     width: 113px
 
+  .loading-bar-spinner
+    top: 14px
+
 .my-list-btn
   width: 23px
-  transition: 300ms 50ms cubic-bezier(0.23, 1, 0.32, 1) all
+  transition: 300ms cubic-bezier(0.23, 1, 0.32, 1) all
   overflow: visible
   margin: 7px
   font-size: 23px

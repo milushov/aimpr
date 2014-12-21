@@ -1,11 +1,15 @@
 .tab
   ul.tabs
-    li(ng-repeat='(site, _) in texts track by $index' ng-class='{"current": site == selected_site}')
-      a(ng-click = 'select(site)') {{site}}
-    | &#x9;&#x9;
+    div(ng-if='isAnyText()')
+      li(ng-repeat='(site, _) in track.lyrics track by $index' ng-class='{"current": site == selected_site}')
+        a(ng-click = 'select(site)') {{site}}
+      | &#x9;&#x9;
 
-    a.btn.btn-success.btn-sm.save-lyrics(ng-show='texts' ng-click='save(selected_site)') Сохранить
+      button.btn.btn-success.btn-sm.save-lyrics(ng-click='save(track)') Сохранить
+
+    div(ng-if='!isAnyText() && !track.is_loading')
+      span.lyrics-not-found ни одного текста не найдено :(
 
   .tab_content
-    .tabs_item(ng-repeat='(site, text) in texts track by $index')
-      textarea.form-control.msd-elastic.track-text(ng-model='text' rows=3) {{text}}
+    .tabs_item(ng-repeat='(_, text) in track.lyrics track by $index')
+      textarea.form-control.msd-elastic.track-text(ng-model='text' ng-change='updateText(text)' rows=3) {{text}}

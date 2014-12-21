@@ -1,0 +1,7 @@
+@import '_variables';
+
+.btn-success {
+  color: #fff;
+  background-color: darken($green, 5%);
+  border: none;
+}

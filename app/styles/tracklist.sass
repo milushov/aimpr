@@ -1,15 +1,10 @@
 @import '_variables'
 
-$lighten-green: lighten($green, 30%)
-
 .tracklist-wrapper
   overflow: hidden
 
 .tracklist
   margin-top: 15px
-
-.track-deleted
-  background-color: #eaedf0
 
 .track-body
   overflow: hidden
@@ -26,8 +21,10 @@ $lighten-green: lighten($green, 30%)
   margin-top: 1.5px
 
 .track-body
+  margin-top: 3px
+
   &:hover
-    background-color: $lighten-green
+    background-color: $lighten-gray
 
     .track-duration
       display: none
@@ -38,8 +35,17 @@ $lighten-green: lighten($green, 30%)
   a:hover
     color: darken($gray, 10%)
 
-.track-body.active
-  background-color: $lighten-green
+  &.active
+    background-color: $lighten-gray
+
+  &.deleted
+    background-color: lighten($gray, 20%)
+
+  &.improved
+    background-color: $lighten-green
+
+  &.failed
+    background-color: lighten($red, 10%)
 
 .duration-or-btn
   text-align: right

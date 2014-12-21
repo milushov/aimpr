@@ -1,4 +1,4 @@
-.row.track-body(ng-click='playOrPause(track)' ng-class='{"track-deleted": track.deleted == true, "active": track.is_playing}')
+.row.track-body(ng-click='playOrPause(track)' ng-class='{"deleted": track.deleted == true, "active": track.is_playing, "improved": track.state == "improved", "failed": track.state == "failed" }')
   .col-xs-1
     .loading-bar-spinner(ng-if='track.is_loading')
       .spinner-icon
@@ -20,4 +20,4 @@
 .row(ng-if='isTrackSelected(track.id)')
   .col-xs-12
     div(ng-controller='BestLyricsCtrl')
-      lyrics-tabs(texts='cur_track.lyrics')
+      lyrics-tabs(track='cur_track')

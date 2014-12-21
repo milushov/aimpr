@@ -10,10 +10,11 @@ angular.module('aimprApp')
     $ls.sites = [] unless $ls.sites?
     $ls.tracks = {} unless $ls.tracks?
 
-    @save = (track) =>
-      text = track.lyrics[track.best_lyrics_from]
-      API.saveTrack(Info.viewer_id, track.id, text).then (data) =>
+    @save = (track, callback) =>
+      track.need_to_save = no
+      API.saveTrack(Info.viewer_id, track).then (data) =>
         @saveChoiceToLocalStorage(track)
+        callback() if callback
 
     @saveChoiceToLocalStorage = (track) ->
       site = track.best_lyrics_from

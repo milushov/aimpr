@@ -118,13 +118,18 @@ angular.module('aimprApp')
 
         LyricsProcessor.improveList $scope.tracks, (track) ->
           completed_tracks_count = Stat[tracklist_scope].improved + Stat[tracklist_scope].failed
-
           ladda.progress(completed_tracks_count, tracks_count)
 
-          if track.state is 'TEXT_FOUND'
-            Stat[tracklist_scope].improved += 1
-          else if track.state is 'TEXT_NOT_FOUND'
+
+          if Object.keys(track.lyrics).length
+            TrackService.save track, ->
+              Stat[tracklist_scope].improved += 1
+              track.state = 'improved'
+              $scope.$parent.$apply()
+          else
             Stat[tracklist_scope].failed += 1
+            track.state = 'failed'
+
         , ->
           lada.stop()
 
