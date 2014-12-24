@@ -1,4 +1,4 @@
-/*! aimpr 0.0.0 Wed Dec 24 2014 14:26:01 GMT+0300 (MSK) */
+/*! aimpr 0.0.0 Wed Dec 24 2014 14:32:19 GMT+0300 (MSK) */
 angular.module('aimprApp', ['ngAnimate', 'monospaced.elastic', 'ngRoute', 'truncate', 'ngStorage', 'cgNotify']).config([
   '$locationProvider', function($locationProvider) {
     return $locationProvider.html5Mode({
