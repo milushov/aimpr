@@ -1,0 +1,17 @@
+
+<div class="friends">
+  <div ng-if="friends.length &gt; getPerPage()" class="row friends-search-box">
+    <div ng-class="{&quot;yo-hide&quot;: user_id == viewer_id}" class="my-list-btn yo-hide"><span ng-click="showUserTracks(viewer_id)" class="glyphicon glyphicon-chevron-left"></span></div>
+    <div ng-class="{&quot;with-btn&quot;: user_id != viewer_id}" class="search-wrapper">
+      <input placeholder="поиск.." ng-model="search.name" ng-change="getFriendsByName(search.name)" class="form-control"/>
+      <div ng-if="is_loading" class="loading-bar-spinner">
+        <div class="spinner-icon"></div>
+      </div>
+    </div>
+  </div>
+  <div class="friends-list">
+    <div ng-repeat="friend in rendered_friends track by $index" ng-click="showUserTracks(friend.id)" ng-class="{active: friend.id == user_id}" class="row friend-item"><img src="{{friend.photo_50}}" class="img-circle friend-photo"/><span class="friend-name">{{friend.first_name | limitTo:10}}</span></div>
+  </div>
+  <!-- big thanks to http://stackoverflow.com/a/22570031/1171144-->
+  <div ng-if="(friends.length &gt; getPerPage() &amp;&amp; !search.name.length)" class="row"><a ng-click="showPart(&quot;next&quot;)" class="btn btn-success show-more">Еще</a></div>
+</div>

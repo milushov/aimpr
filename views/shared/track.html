@@ -1,0 +1,20 @@
+
+<div ng-click="playOrPause(track)" ng-class="{&quot;deleted&quot;: track.deleted == true, &quot;active&quot;: track.is_playing, &quot;improved&quot;: track.state == &quot;improved&quot;, &quot;failed&quot;: track.state == &quot;failed&quot; }" class="row track-body">
+  <div class="col-xs-1">
+    <div ng-if="track.is_loading" class="loading-bar-spinner">
+      <div class="spinner-icon"></div>
+    </div>
+  </div>
+  <div class="col-xs-1"><span ng-class="{&quot;glyphicon-play&quot;: !track.is_playing, &quot;glyphicon-pause&quot;: track.is_playing}" class="glyphicon"></span></div>
+  <div class="col-xs-8"><a ng-click="showTrack(track.id); $event.stopPropagation();" class="track-name">{{track | trackName:37 :true}}</a></div>
+  <div class="col-xs-2 duration-or-btn"><span class="track-duration">{{track.duration | duration}}</span><span class="add-remove-btn">
+      <div ng-if="track.owner_id == viewer_id" ng-class="{active: !track.deleted }" ng-click="addOrRemove(track, {my_list: true}); $event.stopPropagation();" class="square-toggle square"></div>
+      <div ng-if="track.owner_id != viewer_id" ng-class="{active: (track.deleted === false)}" ng-click="addOrRemove(track); $event.stopPropagation();" class="square-toggle square"></div></span></div>
+</div>
+<div ng-if="isTrackSelected(track.id)" class="row">
+  <div class="col-xs-12">
+    <div ng-controller="BestLyricsCtrl">
+      <lyrics-tabs track="cur_track"></lyrics-tabs>
+    </div>
+  </div>
+</div>

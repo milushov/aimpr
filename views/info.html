@@ -1,0 +1,24 @@
+
+<div class="toggle slide2">
+  <input id="d" type="checkbox" ng-model="stat.is_all_tracks"/>
+  <label for="d">
+    <div class="card"></div>
+  </label>
+</div>
+<div class="info">
+  <div>
+    <div class="row">всего</div>
+    <div class="row"><b>{{stat[ stat.is_all_tracks ? 'all_count' : 'without_lyrics_count' ].all}}</b></div>
+  </div>
+  <div>
+    <div class="row">улучшено</div>
+    <div class="row"><b>{{stat[ stat.is_all_tracks ? 'all_count' : 'without_lyrics_count' ].improved}}</b></div>
+  </div>
+  <div>
+    <div class="row">зафейлено</div>
+    <div class="row"><b>{{stat[ stat.is_all_tracks ? 'all_count' : 'without_lyrics_count' ].failed}}</b></div>
+  </div>
+</div>
+<div class="improve-button">
+  <button post-render="ladda-init" ng-click="improveList()" data-style="expand-right" data-color="aimpr" data-size="s" data-spinner-color="AliceBlue" class="ladda-button"><span class="ladda-label">Улучшить</span></button>
+</div><span wtf="wtf" data-modal-id="wtf" class="glyphicon glyphicon-info-sign yo-modal-trigger wtf"></span>

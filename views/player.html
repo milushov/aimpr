@@ -1,0 +1,13 @@
+
+<div class="row player-wrapper">
+  <div class="col-xs-2 player-play-or-stop-wrapper"><span ng-click="playOrPause()" ng-class="{&quot;glyphicon-play&quot;: !cur_playing.is_playing, &quot;glyphicon-pause&quot;: cur_playing.is_playing}" class="glyphicon player-play-or-stop"></span></div>
+  <div class="col-xs-10 player-body">
+    <div class="row player-track-name">
+      <div class="col-xs-10">{{cur_playing | trackName:33 :true}}</div>
+      <div class="col-xs-2 player-track-duration">{{cur_playing.duration - cur_time | duration}}</div>
+    </div>
+    <div class="row player-slider">
+      <input ng-model="position.cur" type="range" min="0" max="{{::position.max}}"/>
+    </div>
+  </div>
+</div>

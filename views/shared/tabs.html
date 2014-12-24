@@ -1,0 +1,15 @@
+
+<div class="tab">
+  <ul class="tabs">
+    <div ng-if="isAnyText()">
+      <li ng-repeat="(site, _) in track.lyrics track by $index" ng-class="{&quot;current&quot;: site == selected_site}"><a ng-click="select(site)">{{site}}</a></li>&#x9;&#x9;
+      <button ng-click="save(track)" class="btn btn-success btn-sm save-lyrics">Сохранить</button>
+    </div>
+    <div ng-if="!isAnyText() &amp;&amp; !track.is_loading"><span class="lyrics-not-found">ни одного текста не найдено :(</span></div>
+  </ul>
+  <div class="tab_content">
+    <div ng-repeat="(_, text) in track.lyrics track by $index" class="tabs_item">
+      <textarea ng-model="text" ng-change="updateText(text)" rows="3" class="form-control msd-elastic track-text">{{text}}</textarea>
+    </div>
+  </div>
+</div>

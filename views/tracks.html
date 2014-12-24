@@ -1,0 +1,7 @@
+
+<player ng-controller="PlayerCtrl" ng-include="&quot;views/player.html&quot;"></player>
+<div ng-class="{reload: reload}" class="tracklist">
+  <div ng-repeat="track in rendered_tracks track by $index" id="track-{{track.id}}" class="row track">
+    <div ng-include="&quot;views/shared/track.html&quot;"></div>
+  </div>
+</div>
