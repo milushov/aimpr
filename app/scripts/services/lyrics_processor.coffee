@@ -85,6 +85,7 @@ angular.module('aimprApp')
           $interval.cancel(stop_time)
           finish_callback()
 
+
       tick = (track) ->
         # how much requsts i expect
         # i.e. first request would have number 1
@@ -112,11 +113,13 @@ angular.module('aimprApp')
 
       tick(tracks[queue.shift()])
 
+
       if queue.length
         stop_time = $interval ->
           track = tracks[queue.shift()]
           track.is_loading = yes
           tick(track)
+          #callback(track)
 
         , INTERVAL_TIME
     return

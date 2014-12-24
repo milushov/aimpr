@@ -12,9 +12,6 @@ angular.module('aimprApp')
 
     $scope.cur_track = TrackService.cur_track
 
-    #$scope.$on '$viewContentLoaded', $scope.helpers.resizeIFrame()
-    #$scope.$on '$includeContentLoaded', $scope.helpers.resizeIFrame()
-
     unless $scope.cur_track.lyrics?
       $scope.cur_track.is_loading = yes
 
@@ -22,8 +19,6 @@ angular.module('aimprApp')
         $scope.$emit 'setSelectedSite'
         track.state = 'failed' unless Object.keys(track.lyrics).length
         $scope.$apply()
-        #$timeout (-> $scope.helpers.resizeIFrame()), 100
-
   ]
 
 

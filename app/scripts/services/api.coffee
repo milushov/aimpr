@@ -32,17 +32,22 @@ angular.module('aimprApp')
         deferred.reject(new Error(error_msg))
 
 
-    processServerError = (data, status, deferred) ->
-      error_msg =
+    _processServerError = (data, status, deferred) ->
+      error_msg = 'server is died :( please try again later'
       unless is_server_died
         notify(
-          message:  'server is died :( please try again later'
+          message: error_msg
           classes: 'my-alert-danger'
         )
 
         $timeout (-> is_server_died = no), 10000
 
       is_server_died = yes
+      deferred.reject(new Error(error_msg))
+
+
+    processServerError = (data, status, deferred) ->
+      error_msg = 'server is died or thinking more than 3 seconds :( please try again later'
       deferred.reject(new Error(error_msg))
 
 

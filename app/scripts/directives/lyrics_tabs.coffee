@@ -5,7 +5,7 @@
  # # lyricsTabs
 ###
 angular.module('aimprApp')
-  .directive 'lyricsTabs', ['$rootScope', 'TrackService', (rootScope, TrackService) ->
+  .directive 'lyricsTabs', ['$rootScope', 'TrackService', 'ViewHelpers', (rootScope, TrackService, ViewHelpers) ->
     templateUrl: 'views/shared/tabs.html'
     restrict: 'E'
     scope: {
@@ -28,6 +28,7 @@ angular.module('aimprApp')
 
       setSelectedSite = ->
         $scope.selected_site = $scope.track.best_lyrics_from
+        ViewHelpers.resizeIFrame()
 
       setSelectedSite()
 

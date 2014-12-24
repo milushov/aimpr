@@ -70,10 +70,7 @@ angular.module('aimprApp')
           $scope.cur_part += 1
           $scope.$apply()
 
-          # http://goo.gl/xxfBVq
-          $timeout (-> ViewHelpers.resizeIFrame()), 100
-          #$scope.$on('$viewContentLoaded', ViewHelpers.resizeIFrame()))
-          #$scope.$on('$includeContentLoaded', ViewHelpers.resizeIFrame()))
+          ViewHelpers.resizeIFrame()
           callback() if callback
 
 
@@ -92,10 +89,7 @@ angular.module('aimprApp')
           $scope.cur_part += 1
           $scope.$apply()
 
-          # http://goo.gl/xxfBVq
-          $timeout (-> ViewHelpers.resizeIFrame()), 100
-          #$scope.$on('$viewContentLoaded', ViewHelpers.resizeIFrame()))
-          #$scope.$on('$includeContentLoaded', ViewHelpers.resizeIFrame()))
+          ViewHelpers.resizeIFrame()
           callback() if callback
 
 
@@ -104,10 +98,12 @@ angular.module('aimprApp')
         getTracks ->
           if $scope.tracks?.length
             $scope.$emit 'setFirstTrack', $scope.tracks[0]
+            ViewHelpers.resizeIFrame()
       else
         getTracksWithoutLyrics ->
           if $scope.tracks?.length
             $scope.$emit 'setFirstTrack', $scope.tracks[0]
+            ViewHelpers.resizeIFrame()
 
 
       $rootScope.$on 'improveList', ->
@@ -119,7 +115,6 @@ angular.module('aimprApp')
         LyricsProcessor.improveList $scope.tracks, (track) ->
           completed_tracks_count = Stat[tracklist_scope].improved + Stat[tracklist_scope].failed
           ladda.progress(completed_tracks_count, tracks_count)
-
 
           if Object.keys(track.lyrics).length
             TrackService.save track, ->
@@ -139,8 +134,8 @@ angular.module('aimprApp')
         renderPage()
         $scope.$apply()
         #$scope.is_loading = false
-        $timeout (-> $scope.is_loading = false), 500, false
-        $timeout (-> ViewHelpers.resizeIFrame()), 500, false
+        $timeout (-> $scope.is_loading = false), 500
+        ViewHelpers.resizeIFrame()
 
         if isAlmostLastPart()
           if Stat.is_all_tracks || !isMyList()
@@ -168,7 +163,7 @@ angular.module('aimprApp')
 
 
       initScroll (scroll, height) ->
-        is_min_heigth = ($window.innerHeight - (scroll + height)) < 200
+        is_min_heigth = ($window.innerHeight - (scroll + height)) < 500
         loadMore() if is_min_heigth && !$scope.is_loading && !isAllTrackRendered()
 
 
@@ -226,11 +221,11 @@ angular.module('aimprApp')
         TrackService.cur_track = ($scope.tracks.filter (t) -> t.id is id)[0]
 
         if cur_selected_track is id
+          ViewHelpers.resizeIFrame()
           return cur_selected_track = null
         else
           cur_selected_track = id
 
-        $timeout (-> ViewHelpers.resizeIFrame()), 100, false
 
 
       $scope.isTrackSelected = (aid) ->
